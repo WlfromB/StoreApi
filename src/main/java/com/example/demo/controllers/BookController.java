@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @Slf4j
@@ -36,6 +37,18 @@ public class BookController {
             return ResponseEntity.ok(bookService.getBookById(index));
         } catch (Exception e) {
             log.error(e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @GetMapping("/authors")
+    public ResponseEntity<List<Book>> getBooksByAuthors(@RequestBody List<Long> authorIds){
+        try{
+            return ResponseEntity.ok(bookService.getBooksByAuthors(authorIds));
+        }
+        catch (Exception e)
+        {
+            log.error("Books not found");
             return ResponseEntity.notFound().build();
         }
     }

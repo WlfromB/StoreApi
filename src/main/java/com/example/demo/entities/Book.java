@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -36,5 +37,6 @@ public class Book {
 
     @ManyToMany(mappedBy = "books")
     @JsonIgnoreProperties("books")
+    @ToString.Exclude
     private Set<Author> authors;
 }
