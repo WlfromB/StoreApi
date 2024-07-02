@@ -2,10 +2,14 @@ package com.example.demo.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,13 +24,16 @@ public class Author {
     private long id;
 
     @Column(name = "firstname")
+    @NotBlank
     private String firstName;
 
     @Column(name = "lastname")
+    @NotBlank
     private String lastName;
 
     @Column(nullable = false, name = "day_of_birthday")
-    private Date dateOfBirthday;
+    @Past
+    private LocalDate dateOfBirthday;
 
     public Author() {
         books = new HashSet<>();
@@ -41,4 +48,7 @@ public class Author {
     )
     @ToString.Exclude
     private Set<Book> books;
+    
+    @OneToMany(mappedBy = "authors", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Discount> discounts;
 }

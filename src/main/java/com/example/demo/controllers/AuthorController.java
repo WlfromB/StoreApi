@@ -1,13 +1,14 @@
 package com.example.demo.controllers;
 
 import com.example.demo.entities.Book;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entities.Author;
-import com.example.demo.service.AuthorService;
+import com.example.demo.service.author.AuthorService;
 
 import java.util.List;
 
@@ -37,10 +38,11 @@ public class AuthorController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<Author> createAuthor(@RequestBody Author author) {
+    @PostMapping("/{id}")
+    public ResponseEntity<Author> createAuthor(@Valid @RequestBody Author author,
+                                               @PathVariable long id) {
         try {
-            authorService.saveAuthor(author);
+            authorService.saveAuthor(author, id);
             log.info("successfully created author");
             return ResponseEntity.ok(author);
         } catch (Exception e) {
@@ -51,7 +53,7 @@ public class AuthorController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<String> updateAuthor(
-            @RequestBody Book book,
+            @Valid @RequestBody Book book,
             @PathVariable(name = "id") long id) {
         try {
             authorService.addBook(book, id);

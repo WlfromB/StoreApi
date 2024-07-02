@@ -13,7 +13,7 @@ import java.util.Set;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT b FROM Book b JOIN b.authors a WHERE a.id IN :authorIds")
-    List<Book> findBookByAuthors(@Param("authorIds")List<Long> authors);
+    List<Book> findBookByAuthors(@Param("authorIds") List<Long> authors);
 
     Book findBookByTitle(String title);
 }

@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.author;
 
 
 import com.example.demo.entities.Author;
@@ -11,7 +11,7 @@ public interface AuthorService {
 
     List<Author> getAllAuthors() throws Exception;
 
-    void saveAuthor(Author author);
+    void saveAuthor(Author author, long userId) throws Exception;
 
     void addBook(Book book, long authorId) throws Exception;
     //   void saveAuthor(AuthorCreateRequest request);

@@ -1,15 +1,16 @@
 package com.example.demo.controllers;
 
 import com.example.demo.entities.Book;
-import com.example.demo.service.AuthorService;
-import com.example.demo.service.BookService;
+import com.example.demo.service.author.AuthorService;
+import com.example.demo.service.book.BookService;
+import jakarta.validation.Valid;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @Slf4j
@@ -54,11 +55,24 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
+    public ResponseEntity<Book> createBook(@Valid @RequestBody Book book) {
         try {
             bookService.saveBook(book);
             return ResponseEntity.ok(book);
         } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    
+    @PatchMapping("/{id}/authors")
+    public ResponseEntity<Book> updateBook(@RequestBody List<Long> authorIds,
+                                           @PathVariable long id) {
+        try{
+            return ResponseEntity.ok(bookService.setAuthors(id, authorIds));
+        }
+        catch (Exception e)
+        {
             log.error(e.getMessage());
             return ResponseEntity.badRequest().build();
         }

@@ -1,10 +1,13 @@
-package com.example.demo.service;
+package com.example.demo.service.author;
 
 import com.example.demo.dao.AuthorRepository;
 import com.example.demo.dao.BookRepository;
+import com.example.demo.dao.UserRepository;
 import com.example.demo.entities.Author;
 
 import com.example.demo.entities.Book;
+import com.example.demo.entities.Role;
+import com.example.demo.entities.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,9 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Autowired
     private BookRepository bookRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     @Transactional
@@ -43,8 +49,16 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public void saveAuthor(Author author) {
-        authorRepository.save(author);
+    public void saveAuthor(Author author, long userId) throws Exception {
+        User user = userRepository.findById(userId).orElse(null);
+        if(user!=null){
+            user.setAuthor(author);
+            user.changeRole(Role.Author);
+            userRepository.save(user);
+            authorRepository.save(author);
+            return;
+        }        
+        throw new Exception("User not found");
     }
 
     @Override
@@ -56,7 +70,6 @@ public class AuthorServiceImpl implements AuthorService {
             addedBook = book;
         }
         addedBook.getAuthors().add(author);
-        bookRepository.save(addedBook);
         author.getBooks().add(addedBook);
         authorRepository.save(author);
     }
