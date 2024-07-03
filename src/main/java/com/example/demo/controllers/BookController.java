@@ -1,12 +1,19 @@
 package com.example.demo.controllers;
 
 import com.example.demo.entities.Book;
+import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.author.AuthorService;
 import com.example.demo.service.book.BookService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,9 +30,13 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/books")
-    public ResponseEntity<List<Book>> getAllBooks() {
-        try {
-            return ResponseEntity.ok(bookService.getAllBooks());
+    public ResponseEntity<Page<Book>> getAllBooks(
+            @ModelAttribute PaginationParams paginationParams) {
+        try{
+            Pageable pageable = PageRequest.of(paginationParams.getPage(),
+                    paginationParams.getSize(),
+                    Sort.by(paginationParams.getSortBy()));
+            return ResponseEntity.ok(bookService.getAllBooks(pageable));
         } catch (Exception e) {
             log.error("Books not found");
             return ResponseEntity.notFound().build();
@@ -43,9 +54,14 @@ public class BookController {
     }
     
     @GetMapping("/authors")
-    public ResponseEntity<List<Book>> getBooksByAuthors(@RequestParam List<Long> authorId){
+    public ResponseEntity<Page<Book>> getBooksByAuthors(
+            @RequestParam List<Long> authorId,
+            @ModelAttribute PaginationParams paginationParams) {
         try{
-            return ResponseEntity.ok(bookService.getBooksByAuthors(authorId));
+            Pageable pageable = PageRequest.of(paginationParams.getPage(),
+                    paginationParams.getSize(),
+                    Sort.by(paginationParams.getSortBy()));
+            return ResponseEntity.ok(bookService.getBooksByAuthors(authorId, pageable));
         }
         catch (Exception e)
         {

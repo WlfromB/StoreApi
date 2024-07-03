@@ -8,6 +8,8 @@ import com.example.demo.entities.Author;
 import com.example.demo.entities.Book;
 import com.example.demo.entities.Discount;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,40 +34,46 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     @Transactional
-    public List<Discount> getDiscountsByBook(Long bookId) throws Exception {
+    public Page<Discount> getDiscountsByBook(Long bookId, Pageable pageable) throws Exception {
         return discountRepository.findDiscountsByBook(
-                        bookRepository.findById(bookId).orElseThrow(NOT_FOUND_EXCEPTION_SUPPLIER))
-                .orElseThrow(NOT_FOUND_EXCEPTION_SUPPLIER);
+                bookRepository.findById(bookId).orElseThrow(NOT_FOUND_EXCEPTION_SUPPLIER),
+                pageable);
     }
 
     @Override
     @Transactional
-    public List<Discount> getDiscountByBookAndDate(Long bookId, LocalDate date) throws Exception {
+    public Page<Discount> getDiscountByBookAndDate(Long bookId, LocalDate date, Pageable pageable)
+            throws Exception {
         return discountRepository
                 .findDiscountByBookAndDateOfSaleStartLessThanEqualAndDateOfSaleEndGreaterThanEqual
                         (bookRepository.findById(bookId).orElseThrow(NOT_FOUND_EXCEPTION_SUPPLIER),
-                                date, date).orElseThrow(NOT_FOUND_EXCEPTION_SUPPLIER);
+                                date, date, pageable);
     }
 
     @Override
     @Transactional
-    public List<Discount> getDiscountByAuthor(Long authorId) throws Exception {
+    public Page<Discount> getDiscountByAuthor(Long authorId, Pageable pageable) throws Exception {
         return discountRepository
                 .findDiscountByAuthor(authorRepository.findById(authorId)
-                        .orElseThrow(NOT_FOUND_EXCEPTION_SUPPLIER))
-                .orElseThrow(NOT_FOUND_EXCEPTION_SUPPLIER);
+                        .orElseThrow(NOT_FOUND_EXCEPTION_SUPPLIER), pageable);
     }
 
     @Override
     @Transactional
-    public List<Discount> getDiscountsByDate(LocalDate date) throws Exception {
-        return discountRepository.findDiscountByDateOfSaleStartLessThanEqualAndDateOfSaleEndGreaterThanEqual(date, date)
-                .orElseThrow(NOT_FOUND_EXCEPTION_SUPPLIER);
+    public Page<Discount> getDiscountsByDate(LocalDate date, Pageable pageable) throws Exception {
+        return discountRepository
+                .findDiscountByDateOfSaleStartLessThanEqualAndDateOfSaleEndGreaterThanEqual(
+                        date, date, pageable);
     }
 
     @Override
     @Transactional
     public Discount saveDiscount(DiscountDto discount, Book book) {
         return discountRepository.save(discount.from(book));
+    }
+
+    @Override
+    public Page<Discount> getAll(Pageable pageable) {
+        return discountRepository.findAll(pageable);
     }
 }

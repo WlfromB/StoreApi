@@ -1,9 +1,16 @@
 package com.example.demo.controllers;
 
 import com.example.demo.entities.Book;
+import com.example.demo.pagination.PaginationParams;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,24 +37,15 @@ public class AuthorController {
     }
 
     @GetMapping("/authors")
-    public ResponseEntity<List<Author>> getAuthors() {
-        try {
-            return ResponseEntity.ok(authorService.getAllAuthors());
+    public ResponseEntity<Page<Author>> getAuthors( 
+            @ModelAttribute PaginationParams paginationParams) {
+        try{
+            Pageable pageable = PageRequest.of(paginationParams.getPage(),
+                    paginationParams.getSize(),
+                    Sort.by(paginationParams.getSortBy()));
+            return ResponseEntity.ok(authorService.getAllAuthors(pageable));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping("/{id}")
-    public ResponseEntity<Author> createAuthor(@Valid @RequestBody Author author,
-                                               @PathVariable long id) {
-        try {
-            authorService.saveAuthor(author, id);
-            log.info("successfully created author");
-            return ResponseEntity.ok(author);
-        } catch (Exception e) {
-            log.error("error when creating author");
-            return ResponseEntity.badRequest().build();
         }
     }
 

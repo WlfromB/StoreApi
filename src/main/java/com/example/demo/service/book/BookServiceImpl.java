@@ -7,6 +7,8 @@ import com.example.demo.entities.Book;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +35,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public List<Book> getAllBooks() throws Exception {
-        List<Book> books = bookRepository.findAll();
+    public Page<Book> getAllBooks(Pageable pageable) throws Exception {
+        Page<Book> books = bookRepository.findAll(pageable);
         if (books.isEmpty()) {
             throw new Exception("No books found");
         }
@@ -49,8 +51,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public List<Book> getBooksByAuthors(List<Long> authorIds) throws Exception {
-        List<Book> books = bookRepository.findBookByAuthors(authorIds);
+    public Page<Book> getBooksByAuthors(List<Long> authorIds, Pageable pageable) throws Exception {
+        Page<Book> books = bookRepository.findBookByAuthors(authorIds, pageable);
         if (books.isEmpty()) {
             throw new Exception("No books found");
         }

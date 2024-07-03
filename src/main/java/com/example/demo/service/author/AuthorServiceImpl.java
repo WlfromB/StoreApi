@@ -10,6 +10,8 @@ import com.example.demo.entities.Role;
 import com.example.demo.entities.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +41,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public List<Author> getAllAuthors() throws Exception {
-        List<Author> authors = authorRepository.findAll();
+    public Page<Author> getAllAuthors(Pageable pageable) throws Exception {
+        Page<Author> authors = authorRepository.findAll(pageable);
         if (authors.isEmpty()) {
             throw new Exception("Authors not found");
         }

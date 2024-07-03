@@ -3,11 +3,16 @@ package com.example.demo.controllers;
 import com.example.demo.dao.DiscountRepository;
 import com.example.demo.dto.DiscountDto;
 import com.example.demo.entities.Discount;
+import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.book.BookService;
 import com.example.demo.service.discount.DiscountService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,9 +41,14 @@ public class DiscountController {
     }
 
     @GetMapping("/author")
-    public ResponseEntity<List<Discount>> getDiscountByAuthorId(@RequestParam Long id) {
+    public ResponseEntity<Page<Discount>> getDiscountByAuthorId(
+            @RequestParam Long id,
+            @ModelAttribute PaginationParams paginationParams) {
         try {
-            return ResponseEntity.ok(discountService.getDiscountByAuthor(id));
+            Pageable pageable = PageRequest.of(paginationParams.getPage(),
+                    paginationParams.getSize(),
+                    Sort.by(paginationParams.getSortBy()));
+            return ResponseEntity.ok(discountService.getDiscountByAuthor(id, pageable));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.notFound().build();
@@ -46,9 +56,14 @@ public class DiscountController {
     }
 
     @GetMapping("/date")
-    public ResponseEntity<List<Discount>> getDiscountByDate(@RequestParam LocalDate date) {
+    public ResponseEntity<Page<Discount>> getDiscountByDate(
+            @RequestParam LocalDate date,
+            @ModelAttribute PaginationParams paginationParams) {
         try {
-            return ResponseEntity.ok(discountService.getDiscountsByDate(date));
+            Pageable pageable = PageRequest.of(paginationParams.getPage(),
+                    paginationParams.getSize(),
+                    Sort.by(paginationParams.getSortBy()));
+            return ResponseEntity.ok(discountService.getDiscountsByDate(date, pageable));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.badRequest().build();
@@ -56,10 +71,16 @@ public class DiscountController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Discount>> getDiscountsByBookAndDate(@RequestParam Long bookId
-            , @RequestParam LocalDate date) {
+    public ResponseEntity<Page<Discount>> getDiscountsByBookAndDate(
+            @RequestParam Long bookId, 
+            @RequestParam LocalDate date,
+            @ModelAttribute PaginationParams paginationParams) {
         try {
-            return ResponseEntity.ok(discountService.getDiscountByBookAndDate(bookId, date));
+            Pageable pageable = PageRequest.of(paginationParams.getPage(),
+                    paginationParams.getSize(),
+                    Sort.by(paginationParams.getSortBy()));
+            return ResponseEntity.ok(discountService.getDiscountByBookAndDate(
+                    bookId, date, pageable));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.notFound().build();
@@ -67,15 +88,33 @@ public class DiscountController {
     }
 
     @GetMapping("/book")
-    public ResponseEntity<List<Discount>> getDiscountByBook(@RequestParam Long bookId) {
+    public ResponseEntity<Page<Discount>> getDiscountByBook(
+            @RequestParam Long bookId,
+            @ModelAttribute PaginationParams paginationParams) {
         try {
-            return ResponseEntity.ok(discountService.getDiscountsByBook(bookId));
+            Pageable pageable = PageRequest.of(paginationParams.getPage(),
+                    paginationParams.getSize(),
+                    Sort.by(paginationParams.getSortBy()));
+            return ResponseEntity.ok(discountService.getDiscountsByBook(bookId, pageable));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
     
-    /*@GetMapping
-    public ResponseEntity<List<Discount>> getAllDiscounts() {}*/
+    @GetMapping("/discounts")
+    public ResponseEntity<Page<Discount>> getAllDiscounts(
+            @ModelAttribute PaginationParams paginationParams) {
+        try {
+            Pageable pageable = PageRequest.of(paginationParams.getPage(),
+                    paginationParams.getSize(),
+                    Sort.by(paginationParams.getSortBy()));
+                    return ResponseEntity.ok(discountService.getAll(pageable));
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        
+    }
 }

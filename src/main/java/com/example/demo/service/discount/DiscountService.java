@@ -5,6 +5,8 @@ import com.example.demo.entities.Author;
 import com.example.demo.entities.Book;
 import com.example.demo.entities.Discount;
 import com.example.demo.responses.DiscountsResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,13 +14,15 @@ import java.util.List;
 import java.util.Set;
 
 public interface DiscountService {
-    List<Discount> getDiscountsByBook(Long bookId) throws Exception;
+    Page<Discount> getDiscountsByBook(Long bookId, Pageable pageable) throws Exception;
 
-    List<Discount> getDiscountByBookAndDate(Long bookId, LocalDate date) throws Exception;
+    Page<Discount> getDiscountByBookAndDate(Long bookId, LocalDate date, Pageable pageable) throws Exception;
 
-    List<Discount> getDiscountByAuthor(Long authorId) throws Exception;
+    Page<Discount> getDiscountByAuthor(Long authorId, Pageable pageable) throws Exception;
 
-    List<Discount> getDiscountsByDate(LocalDate date) throws Exception;
+    Page<Discount> getDiscountsByDate(LocalDate date, Pageable pageable) throws Exception;
 
     Discount saveDiscount(DiscountDto discount, Book book);
+    
+    Page<Discount> getAll(Pageable pageable);
 }

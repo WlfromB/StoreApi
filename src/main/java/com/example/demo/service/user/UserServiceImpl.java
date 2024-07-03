@@ -6,6 +6,8 @@ import com.example.demo.entities.User;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +22,8 @@ public class UserServiceImpl implements UserService {
     
     @Override
     @Transactional
-    public List<User> findAll() throws Exception{
-        List<User> users = userRepository.findAll();
+    public Page<User> findAll(Pageable pageable) throws Exception{
+        Page<User> users = userRepository.findAll(pageable);
         if (users.isEmpty()) {
             throw new Exception("Users not found");
         }
