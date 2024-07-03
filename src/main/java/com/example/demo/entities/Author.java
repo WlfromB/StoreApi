@@ -49,6 +49,4 @@ public class Author {
     @ToString.Exclude
     private Set<Book> books;
     
-    @OneToMany(mappedBy = "authors", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Discount> discounts;
 }

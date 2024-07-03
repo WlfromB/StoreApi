@@ -30,7 +30,7 @@ public class UserController {
         }
     }
     
-    @GetMapping
+    @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         try{
             return ResponseEntity.ok(userService.findAll());
@@ -41,10 +41,10 @@ public class UserController {
         }
     }
     
-    @GetMapping("/{index}")
-    public ResponseEntity<User> getUser(@PathVariable long index) {
+    @GetMapping
+    public ResponseEntity<User> getUser(@RequestParam long id) {
         try {   
-            return ResponseEntity.ok(userService.findById(index));
+            return ResponseEntity.ok(userService.findById(id));
         }
         catch (Exception e){
             log.error(e.getMessage());

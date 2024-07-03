@@ -20,8 +20,8 @@ public class AuthorController {
     @Autowired
     private AuthorService authorService;
 
-    @GetMapping("/{index}")
-    public ResponseEntity<Author> getAuthor(@PathVariable(name = "index") long id) {
+    @GetMapping
+    public ResponseEntity<Author> getAuthor(@RequestParam long id) {
         try {
             return ResponseEntity.ok(authorService.getAuthorById(id));
         } catch (Exception e) {
@@ -29,7 +29,7 @@ public class AuthorController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/authors")
     public ResponseEntity<List<Author>> getAuthors() {
         try {
             return ResponseEntity.ok(authorService.getAllAuthors());

@@ -22,7 +22,7 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping
+    @GetMapping("/books")
     public ResponseEntity<List<Book>> getAllBooks() {
         try {
             return ResponseEntity.ok(bookService.getAllBooks());
@@ -32,10 +32,10 @@ public class BookController {
         }
     }
 
-    @GetMapping("/{index}")
-    public ResponseEntity<Book> getBook(@PathVariable long index) {
+    @GetMapping
+    public ResponseEntity<Book> getBook(@RequestParam long id) {
         try {
-            return ResponseEntity.ok(bookService.getBookById(index));
+            return ResponseEntity.ok(bookService.getBookById(id));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.notFound().build();
@@ -43,9 +43,9 @@ public class BookController {
     }
     
     @GetMapping("/authors")
-    public ResponseEntity<List<Book>> getBooksByAuthors(@RequestBody List<Long> authorIds){
+    public ResponseEntity<List<Book>> getBooksByAuthors(@RequestParam List<Long> authorId){
         try{
-            return ResponseEntity.ok(bookService.getBooksByAuthors(authorIds));
+            return ResponseEntity.ok(bookService.getBooksByAuthors(authorId));
         }
         catch (Exception e)
         {

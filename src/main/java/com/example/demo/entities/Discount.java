@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -20,10 +21,6 @@ public class Discount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
-    private Set<Author> authors;
-
     @Column(name = "date_of_sale_start")
     @FutureOrPresent
     private LocalDate dateOfSaleStart;
@@ -39,11 +36,10 @@ public class Discount {
     @Digits(integer = 2, fraction = 2)    
     private BigDecimal dimensionOfSale;
     
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id")
     private Book book;
     
     public Discount(){
-        authors = new HashSet<>();
     }
 }
