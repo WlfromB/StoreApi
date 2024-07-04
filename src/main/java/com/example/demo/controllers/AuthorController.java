@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.dto.BookDto;
 import com.example.demo.entities.Book;
+import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -28,6 +29,9 @@ public class AuthorController {
     @Autowired
     private AuthorService authorService;
 
+    @Autowired
+    private PageableCreator pageableCreator;
+
     @GetMapping
     public ResponseEntity<Author> getAuthor(@RequestParam long id) {
         try {
@@ -41,9 +45,7 @@ public class AuthorController {
     public ResponseEntity<Page<Author>> getAuthors( 
             @ModelAttribute PaginationParams paginationParams) {
         try{
-            Pageable pageable = PageRequest.of(paginationParams.getPage(),
-                    paginationParams.getSize(),
-                    Sort.by(paginationParams.getSortBy()));
+            Pageable pageable = pageableCreator.create(paginationParams);
             return ResponseEntity.ok(authorService.getAllAuthors(pageable));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

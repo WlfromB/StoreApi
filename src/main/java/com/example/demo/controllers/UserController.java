@@ -5,12 +5,11 @@ import com.example.demo.dto.UserDto;
 import com.example.demo.entities.Author;
 import com.example.demo.entities.Role;
 import com.example.demo.entities.User;
+import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.author.AuthorService;
 import com.example.demo.service.user.UserService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,8 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @Slf4j
@@ -31,6 +28,9 @@ public class UserController {
     
     @Autowired
     private AuthorService authorService;
+
+    @Autowired
+    private PageableCreator pageableCreator;
     
     @PostMapping
     public ResponseEntity<User> createUser(@Valid @RequestBody UserDto user) {
@@ -47,9 +47,7 @@ public class UserController {
     public ResponseEntity<Page<User>> getAllUsers(
             @ModelAttribute PaginationParams paginationParams) {
         try{
-            Pageable pageable = PageRequest.of(paginationParams.getPage(),
-                    paginationParams.getSize(),
-                    Sort.by(paginationParams.getSortBy()));
+            Pageable pageable = pageableCreator.create(paginationParams);
             return ResponseEntity.ok(userService.findAll(pageable));
         }
         catch (Exception e){

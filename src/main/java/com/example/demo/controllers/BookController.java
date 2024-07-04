@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.dto.BookDto;
 import com.example.demo.entities.Book;
+import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.author.AuthorService;
 import com.example.demo.service.book.BookService;
@@ -25,18 +26,16 @@ import java.util.List;
 @RequestMapping("/book")
 public class BookController {
     @Autowired
-    private AuthorService authorService;
+    private BookService bookService;
 
     @Autowired
-    private BookService bookService;
+    private PageableCreator pageableCreator;
 
     @GetMapping("/books")
     public ResponseEntity<Page<Book>> getAllBooks(
             @ModelAttribute PaginationParams paginationParams) {
         try {
-            Pageable pageable = PageRequest.of(paginationParams.getPage(),
-                    paginationParams.getSize(),
-                    Sort.by(paginationParams.getSortBy()));
+            Pageable pageable = pageableCreator.create(paginationParams);
             return ResponseEntity.ok(bookService.getAllBooks(pageable));
         } catch (Exception e) {
             log.error("Books not found");
@@ -59,9 +58,7 @@ public class BookController {
             @RequestParam List<Long> authorId,
             @ModelAttribute PaginationParams paginationParams) {
         try {
-            Pageable pageable = PageRequest.of(paginationParams.getPage(),
-                    paginationParams.getSize(),
-                    Sort.by(paginationParams.getSortBy()));
+            Pageable pageable = pageableCreator.create(paginationParams);
             return ResponseEntity.ok(bookService.getBooksByAuthors(authorId, pageable));
         } catch (Exception e) {
             log.error("Books not found");
@@ -72,7 +69,6 @@ public class BookController {
     @PostMapping
     public ResponseEntity<Book> createBook(@Valid @RequestBody BookDto book) {
         try {
-
             return ResponseEntity.ok(bookService.saveBook(book));
         } catch (Exception e) {
             log.error(e.getMessage());
