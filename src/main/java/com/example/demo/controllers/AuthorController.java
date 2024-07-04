@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dto.BookDto;
 import com.example.demo.entities.Book;
 import com.example.demo.pagination.PaginationParams;
 import jakarta.validation.Valid;
@@ -51,7 +52,7 @@ public class AuthorController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<String> updateAuthor(
-            @Valid @RequestBody Book book,
+            @Valid @RequestBody BookDto book,
             @PathVariable(name = "id") long id) {
         try {
             authorService.addBook(book, id);

@@ -3,6 +3,8 @@ package com.example.demo.service.author;
 import com.example.demo.dao.AuthorRepository;
 import com.example.demo.dao.BookRepository;
 import com.example.demo.dao.UserRepository;
+import com.example.demo.dto.AuthorDto;
+import com.example.demo.dto.BookDto;
 import com.example.demo.entities.Author;
 
 import com.example.demo.entities.Book;
@@ -51,25 +53,25 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public void saveAuthor(Author author, long userId) throws Exception {
+    public Author saveAuthor(AuthorDto author, long userId) throws Exception {
         User user = userRepository.findById(userId).orElse(null);
+        Author authorEntity = author.from();
         if(user!=null){
-            user.setAuthor(author);
+            user.setAuthor(authorEntity);
             user.changeRole(Role.Author);
-            userRepository.save(user);
-            authorRepository.save(author);
-            return;
+            userRepository.save(user);            
+            return authorRepository.save(authorEntity);
         }        
         throw new Exception("User not found");
     }
 
     @Override
     @Transactional
-    public void addBook(Book book, long authorId) throws Exception {
+    public void addBook(BookDto book, long authorId) throws Exception {
         Author author = getAuthorById(authorId);
         Book addedBook = bookRepository.findBookByTitle(book.getTitle());
         if (addedBook == null) {
-            addedBook = book;
+            addedBook = book.from();
         }
         addedBook.getAuthors().add(author);
         author.getBooks().add(addedBook);

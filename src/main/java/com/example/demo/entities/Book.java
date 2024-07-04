@@ -46,6 +46,7 @@ public class Book {
 
     public Book() {
         authors = new HashSet<>();
+        discounts = new HashSet<>();
     }
 
     @ManyToMany(mappedBy = "books")

@@ -1,6 +1,7 @@
 package com.example.demo.service.user;
 
 import com.example.demo.dao.UserRepository;
+import com.example.demo.dto.UserDto;
 import com.example.demo.entities.Role;
 import com.example.demo.entities.User;
 import lombok.extern.java.Log;
@@ -40,8 +41,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void save(User user) {
-        userRepository.save(user);
+    public User save(UserDto user) {
+        return userRepository.save(user.from());
     }
     
     @Override

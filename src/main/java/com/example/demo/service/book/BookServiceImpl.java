@@ -2,6 +2,7 @@ package com.example.demo.service.book;
 
 import com.example.demo.dao.AuthorRepository;
 import com.example.demo.dao.BookRepository;
+import com.example.demo.dto.BookDto;
 import com.example.demo.entities.Author;
 import com.example.demo.entities.Book;
 import org.slf4j.Logger;
@@ -45,8 +46,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void saveBook(Book book) {
-        bookRepository.save(book);
+    public Book saveBook(BookDto book) {        
+        return bookRepository.save(book.from());
     }
 
     @Override

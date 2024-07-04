@@ -32,8 +32,7 @@ public class DiscountController {
     @PostMapping
     public ResponseEntity<Discount> discount(@Valid @RequestBody DiscountDto discount) {
         try {
-            return ResponseEntity.ok(discountService.saveDiscount(discount,
-                    bookService.getBookById(discount.getBookId())));
+            return ResponseEntity.ok(discountService.saveDiscount(discount));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.badRequest().build();

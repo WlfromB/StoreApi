@@ -22,7 +22,7 @@ public interface DiscountService {
 
     Page<Discount> getDiscountsByDate(LocalDate date, Pageable pageable) throws Exception;
 
-    Discount saveDiscount(DiscountDto discount, Book book);
+    Discount saveDiscount(DiscountDto discount) throws Exception;
     
     Page<Discount> getAll(Pageable pageable);
 }

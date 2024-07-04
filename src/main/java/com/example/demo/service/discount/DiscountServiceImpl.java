@@ -68,8 +68,11 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     @Transactional
-    public Discount saveDiscount(DiscountDto discount, Book book) {
-        return discountRepository.save(discount.from(book));
+    public Discount saveDiscount(DiscountDto discount) throws Exception {
+        return discountRepository
+                .save(discount
+                        .from(bookRepository.findById(discount.getBookId())
+                                .orElseThrow(NOT_FOUND_EXCEPTION_SUPPLIER)));
     }
 
     @Override

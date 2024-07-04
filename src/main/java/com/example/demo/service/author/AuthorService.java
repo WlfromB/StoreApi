@@ -1,6 +1,8 @@
 package com.example.demo.service.author;
 
 
+import com.example.demo.dto.AuthorDto;
+import com.example.demo.dto.BookDto;
 import com.example.demo.entities.Author;
 import com.example.demo.entities.Book;
 import org.springframework.data.domain.Page;
@@ -13,7 +15,7 @@ public interface AuthorService {
 
     Page<Author> getAllAuthors(Pageable pageable) throws Exception;
 
-    void saveAuthor(Author author, long userId) throws Exception;
+    Author saveAuthor(AuthorDto author, long userId) throws Exception;
 
-    void addBook(Book book, long authorId) throws Exception;
+    void addBook(BookDto book, long authorId) throws Exception;
 }

@@ -2,10 +2,8 @@ package com.example.demo.dto;
 
 import com.example.demo.entities.Book;
 import com.example.demo.entities.Discount;
-import com.example.demo.service.book.BookService;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -27,9 +25,6 @@ public class DiscountDto {
 
     @NotNull
     private Long bookId;
-    
-    @Autowired
-    private BookService bookService;
 
     public Discount from(Book book) 
     {

@@ -1,5 +1,7 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dto.AuthorDto;
+import com.example.demo.dto.UserDto;
 import com.example.demo.entities.Author;
 import com.example.demo.entities.Role;
 import com.example.demo.entities.User;
@@ -31,10 +33,9 @@ public class UserController {
     private AuthorService authorService;
     
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
-        try{
-            userService.save(user);
-            return ResponseEntity.ok(user);
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserDto user) {
+        try{            
+            return ResponseEntity.ok(userService.save(user));
         }
         catch (Exception e){
             log.error(e.getMessage());
@@ -67,12 +68,10 @@ public class UserController {
         }
     }
     @PostMapping("/{id}")
-    public ResponseEntity<Author> createAuthor(@Valid @RequestBody Author author,
+    public ResponseEntity<Author> createAuthor(@Valid @RequestBody AuthorDto author,
                                                @PathVariable long id) {
-        try {
-            authorService.saveAuthor(author, id);
-            log.info("successfully created author");
-            return ResponseEntity.ok(author);
+        try {            
+            return ResponseEntity.ok(authorService.saveAuthor(author, id));
         } catch (Exception e) {
             log.error("error when creating author");
             return ResponseEntity.badRequest().build();

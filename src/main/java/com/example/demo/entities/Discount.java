@@ -22,18 +22,13 @@ public class Discount {
     private Long id;
 
     @Column(name = "date_of_sale_start")
-    @FutureOrPresent
     private LocalDate dateOfSaleStart;
 
     
     @Column(name = "date_of_sale_end")
-    @Future
     private LocalDate dateOfSaleEnd;
 
     @Column(name = "dimension_of_sale", precision = 4, scale = 2)
-    @DecimalMax("99.9")
-    @DecimalMin("0.01")
-    @Digits(integer = 2, fraction = 2)    
     private BigDecimal dimensionOfSale;
     
     @ManyToOne(fetch = FetchType.EAGER)
