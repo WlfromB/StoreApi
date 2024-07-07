@@ -1,17 +1,11 @@
 package com.example.demo.dto;
 
 import com.example.demo.entities.Author;
-import com.example.demo.entities.Book;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import lombok.Data;
-import lombok.ToString;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 public class AuthorDto {

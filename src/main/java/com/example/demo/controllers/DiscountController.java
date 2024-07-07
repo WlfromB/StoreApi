@@ -4,7 +4,6 @@ import com.example.demo.dto.DiscountDto;
 import com.example.demo.entities.Discount;
 import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
-import com.example.demo.service.book.BookService;
 import com.example.demo.service.discount.DiscountService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;

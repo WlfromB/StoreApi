@@ -1,7 +1,6 @@
 package com.example.demo.dto;
 
 import com.example.demo.entities.Book;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 

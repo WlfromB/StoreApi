@@ -3,7 +3,6 @@ package com.example.demo.pagination;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Data
 public class PaginationParams {

@@ -46,7 +46,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public Book saveBook(BookDto book) {        
+    public Book saveBook(BookDto book) {
         return bookRepository.save(book.from());
     }
 
@@ -64,7 +64,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public Book setAuthors(Long bookId, List<Long> authorIds) throws Exception {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new Exception("Book not found"));
-        for(Long authorId : authorIds) {
+        for (Long authorId : authorIds) {
             Author author = authorRepository.findById(authorId).orElseThrow(() -> new Exception("Author not found"));
             book.getAuthors().add(author);
             author.getBooks().add(book);
@@ -72,5 +72,5 @@ public class BookServiceImpl implements BookService {
         bookRepository.save(book);
         return book;
     }
-    
+
 }

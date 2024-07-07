@@ -7,9 +7,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-/*@EntityScan(basePackages = "com/example/demo/entities")
-@EnableJpaRepositories*/
-@Slf4j
 public class Demo1Application {
     public static void main(String[] args) {
         SpringApplication.run(Demo1Application.class, args);

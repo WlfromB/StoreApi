@@ -4,8 +4,6 @@ import com.example.demo.dao.AuthorRepository;
 import com.example.demo.dao.BookRepository;
 import com.example.demo.dao.DiscountRepository;
 import com.example.demo.dto.DiscountDto;
-import com.example.demo.entities.Author;
-import com.example.demo.entities.Book;
 import com.example.demo.entities.Discount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,10 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
 import java.util.function.Supplier;
 
 @Service

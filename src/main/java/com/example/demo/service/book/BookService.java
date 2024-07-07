@@ -13,8 +13,8 @@ public interface BookService {
     Page<Book> getAllBooks(Pageable pageable) throws Exception;
 
     Book saveBook(BookDto book);
-    
+
     Page<Book> getBooksByAuthors(List<Long> authorIds, Pageable pageable) throws Exception;
-    
+
     Book setAuthors(Long bookId, List<Long> authorIds) throws Exception;
 }

@@ -6,7 +6,6 @@ import com.example.demo.dao.UserRepository;
 import com.example.demo.dto.AuthorDto;
 import com.example.demo.dto.BookDto;
 import com.example.demo.entities.Author;
-
 import com.example.demo.entities.Book;
 import com.example.demo.entities.Role;
 import com.example.demo.entities.User;
@@ -17,8 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Slf4j
 public class AuthorServiceImpl implements AuthorService {
@@ -28,7 +25,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Autowired
     private BookRepository bookRepository;
-    
+
     @Autowired
     private UserRepository userRepository;
 
@@ -56,12 +53,12 @@ public class AuthorServiceImpl implements AuthorService {
     public Author saveAuthor(AuthorDto author, long userId) throws Exception {
         User user = userRepository.findById(userId).orElse(null);
         Author authorEntity = author.from();
-        if(user!=null){
+        if (user != null) {
             user.setAuthor(authorEntity);
-            user.changeRole(Role.Author);
-            userRepository.save(user);            
+            user.getRole().add(Role.Author);
+            userRepository.save(user);
             return authorRepository.save(authorEntity);
-        }        
+        }
         throw new Exception("User not found");
     }
 
