@@ -9,6 +9,7 @@ import com.example.demo.entities.Author;
 import com.example.demo.entities.Book;
 import com.example.demo.entities.Role;
 import com.example.demo.entities.User;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,16 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
-
-    @Autowired
-    private AuthorRepository authorRepository;
-
-    @Autowired
-    private BookRepository bookRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private final AuthorRepository authorRepository;
+    private final BookRepository bookRepository;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional

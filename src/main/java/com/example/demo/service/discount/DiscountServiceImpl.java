@@ -5,6 +5,7 @@ import com.example.demo.dao.BookRepository;
 import com.example.demo.dao.DiscountRepository;
 import com.example.demo.dto.DiscountDto;
 import com.example.demo.entities.Discount;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,17 +16,12 @@ import java.time.LocalDate;
 import java.util.function.Supplier;
 
 @Service
+@RequiredArgsConstructor
 public class DiscountServiceImpl implements DiscountService {
     private final static Supplier<Exception> NOT_FOUND_EXCEPTION_SUPPLIER = () -> new Exception("Not Found");
-
-    @Autowired
-    private DiscountRepository discountRepository;
-
-    @Autowired
-    private BookRepository bookRepository;
-
-    @Autowired
-    private AuthorRepository authorRepository;
+    private final DiscountRepository discountRepository;
+    private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
 
     @Override
     @Transactional

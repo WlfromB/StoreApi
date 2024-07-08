@@ -6,8 +6,8 @@ import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.book.BookService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +18,10 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/book")
+@RequiredArgsConstructor
 public class BookController {
-    @Autowired
-    private BookService bookService;
-
-    @Autowired
-    private PageableCreator pageableCreator;
+    private final BookService bookService;
+    private final PageableCreator pageableCreator;
 
     @GetMapping("/books")
     public ResponseEntity<Page<Book>> getAllBooks(

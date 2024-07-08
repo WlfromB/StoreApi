@@ -5,6 +5,7 @@ import org.apache.catalina.Manager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Role;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -41,7 +42,8 @@ public class SecurityConfig {
                     ))
                     .authorizeHttpRequests(request-> request
                             .requestMatchers("/auth/**", "/user").permitAll()
-                            .requestMatchers("/book").hasRole("Admin")
+                            .requestMatchers(HttpMethod.POST, "/discount").hasAnyAuthority("Author", "Admin")
+                            .requestMatchers("/book/**").hasAuthority("Admin")
                             .anyRequest().authenticated())
                     .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

@@ -6,8 +6,8 @@ import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.discount.DiscountService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +18,11 @@ import java.time.LocalDate;
 @RestController
 @RequestMapping("/discount")
 @Slf4j
+@RequiredArgsConstructor
 public class DiscountController {
-    @Autowired
-    private DiscountService discountService;
-    
-    @Autowired
-    private PageableCreator pageableCreator;
-    
+    private final DiscountService discountService;
+    private final PageableCreator pageableCreator;
+
     @PostMapping
     public ResponseEntity<Discount> discount(@Valid @RequestBody DiscountDto discount) {
         try {
@@ -63,7 +61,7 @@ public class DiscountController {
 
     @GetMapping
     public ResponseEntity<Page<Discount>> getDiscountsByBookAndDate(
-            @RequestParam Long bookId, 
+            @RequestParam Long bookId,
             @RequestParam LocalDate date,
             @ModelAttribute PaginationParams paginationParams) {
         try {
@@ -88,17 +86,16 @@ public class DiscountController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     @GetMapping("/discounts")
     public ResponseEntity<Page<Discount>> getAllDiscounts(
             @ModelAttribute PaginationParams paginationParams) {
         try {
             Pageable pageable = pageableCreator.create(paginationParams);
             return ResponseEntity.ok(discountService.getAll(pageable));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.notFound().build();
-        }        
+        }
     }
 }

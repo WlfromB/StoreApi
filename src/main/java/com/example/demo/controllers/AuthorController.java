@@ -6,8 +6,8 @@ import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.author.AuthorService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/author")
 @Slf4j
+@RequiredArgsConstructor
 public class AuthorController {
-
-    @Autowired
-    private AuthorService authorService;
-
-    @Autowired
-    private PageableCreator pageableCreator;
+    private final AuthorService authorService;
+    private final PageableCreator pageableCreator;
 
     @GetMapping
     public ResponseEntity<Author> getAuthor(@RequestParam long id) {
@@ -34,9 +31,9 @@ public class AuthorController {
     }
 
     @GetMapping("/authors")
-    public ResponseEntity<Page<Author>> getAuthors( 
+    public ResponseEntity<Page<Author>> getAuthors(
             @ModelAttribute PaginationParams paginationParams) {
-        try{
+        try {
             Pageable pageable = pageableCreator.create(paginationParams);
             return ResponseEntity.ok(authorService.getAllAuthors(pageable));
         } catch (Exception e) {
