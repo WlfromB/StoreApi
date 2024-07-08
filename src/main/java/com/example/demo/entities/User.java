@@ -1,10 +1,13 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +15,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "users")
+@EqualsAndHashCode(exclude = "roles")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,16 +35,20 @@ public class User {
     @NotBlank
     private String password;
     
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Set<Role> role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")}
+    )
+    @ToString.Exclude
+    @JsonIgnoreProperties("users")
+    private Set<Role> roles;
     
     @OneToOne
     @JoinColumn(name = "author_id", nullable = true)
     private Author author;
     
     public User() {
-        role = new HashSet<>();
-        role.add(Role.Customer);
     }
 }

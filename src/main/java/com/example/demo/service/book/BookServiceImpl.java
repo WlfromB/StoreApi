@@ -27,11 +27,8 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public Book getBookById(long id) throws Exception {
-        Book book = bookRepository.findById(id).orElse(null);
-        if (book == null) {
-            throw new Exception("Book not found");
-        }
-        return book;
+        return bookRepository.findById(id)
+                .orElseThrow(()->new Exception("Book not found"));
     }
 
     @Override

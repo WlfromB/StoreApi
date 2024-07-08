@@ -9,13 +9,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT b FROM Book b JOIN b.authors a WHERE a.id IN :authorIds")
     Page<Book> findBookByAuthors(@Param("authorIds") List<Long> authors, Pageable pageable);
 
-    Book findBookByTitle(String title);
+    Optional<Book> findBookByTitle(String title);
     
     Page<Book> findAll(Pageable pageable);
 }

@@ -13,7 +13,7 @@ public interface UserService {
 
     User findById(long id) throws Exception;
 
-    User save(UserDto user);
+    User save(UserDto user) throws Exception;
 
     void changeRole(long id, Role role) throws Exception;
     

@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
 public class JwtAuthentication implements Authentication {
     private boolean authenticated;
     private String login;
-    private Set<Role> roles;
+    private Set<String> roles;
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(role-> new SimpleGrantedAuthority(role.name()))
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
     }
 

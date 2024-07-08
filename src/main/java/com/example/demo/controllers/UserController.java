@@ -64,6 +64,8 @@ public class UserController {
         try {
             return ResponseEntity.ok(authorService.saveAuthor(author, id));
         } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
             log.error("error when creating author");
             return ResponseEntity.badRequest().build();
         }

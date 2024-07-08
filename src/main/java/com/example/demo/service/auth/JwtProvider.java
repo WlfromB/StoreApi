@@ -16,6 +16,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import com.example.demo.entities.*;
 
 @Slf4j
 @Component
@@ -35,7 +39,7 @@ public class JwtProvider {
                 .setSubject(user.getLogin())
                 .setExpiration(accessExpiration)
                 .signWith(createKey(jwtAccessSecretKey), SignatureAlgorithm.HS256)
-                .claim("roles", user.getRole())
+                .claim("roles", formRoles(user))
                 .compact();
     }
 
@@ -48,7 +52,6 @@ public class JwtProvider {
                 .setSubject(user.getLogin())
                 .setExpiration(refreshExpiration)
                 .signWith(createKey(jwtRefreshSecretKey),SignatureAlgorithm.HS256)
-                .claim("role", user.getRole())
                 .compact();
     }
     
@@ -64,7 +67,7 @@ public class JwtProvider {
             log.error("Token expired", expEx);
         } catch (UnsupportedJwtException unsEx) {
             log.error("Unsupported jwt", unsEx);
-        } catch (MalformedJwtException mjEx) {
+        } catch (MalformedJwtException mjEx) {  
             log.error("Malformed jwt", mjEx);
         } catch (SignatureException sEx) {
             log.error("Invalid signature", sEx);
@@ -107,5 +110,11 @@ public class JwtProvider {
     private byte[] createBytes(String secret){
         byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         return Arrays.copyOf(keyBytes, 32);
+    }
+    
+    private Set<String> formRoles(User user){
+        return user.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toSet());
     }
 }

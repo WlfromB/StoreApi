@@ -2,6 +2,7 @@ package com.example.demo.service.author;
 
 import com.example.demo.dao.AuthorRepository;
 import com.example.demo.dao.BookRepository;
+import com.example.demo.dao.RoleRepository;
 import com.example.demo.dao.UserRepository;
 import com.example.demo.dto.AuthorDto;
 import com.example.demo.dto.BookDto;
@@ -24,6 +25,7 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional
@@ -48,12 +50,17 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional
     public Author saveAuthor(AuthorDto author, long userId) throws Exception {
         User user = userRepository.findById(userId).orElse(null);
-        Author authorEntity = author.from();
+        Author authorEntity = authorRepository.save(author.from());
         if (user != null) {
             user.setAuthor(authorEntity);
-            user.getRole().add(Role.Author);
+            Role role = roleRepository.findByName("Author")
+                    .orElseThrow(() -> new Exception("Role not found"));
+            user.getRoles().add(role);
+            role.getUsers().add(user);
+            roleRepository.save(role);
+            
             userRepository.save(user);
-            return authorRepository.save(authorEntity);
+            return authorEntity;
         }
         throw new Exception("User not found");
     }
@@ -62,10 +69,8 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional
     public void addBook(BookDto book, long authorId) throws Exception {
         Author author = getAuthorById(authorId);
-        Book addedBook = bookRepository.findBookByTitle(book.getTitle());
-        if (addedBook == null) {
-            addedBook = book.from();
-        }
+        Book addedBook = bookRepository.findBookByTitle(book.getTitle())
+                .orElse(book.from());
         addedBook.getAuthors().add(author);
         author.getBooks().add(addedBook);
         authorRepository.save(author);
