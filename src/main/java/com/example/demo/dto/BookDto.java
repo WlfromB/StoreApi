@@ -1,11 +1,15 @@
 package com.example.demo.dto;
 
+import com.example.demo.entities.Author;
 import com.example.demo.entities.Book;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 public class BookDto {
@@ -34,4 +38,5 @@ public class BookDto {
         book.setPrice(price);
         return book;
     }
+    
 }

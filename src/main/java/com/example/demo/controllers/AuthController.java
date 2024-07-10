@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
-    @PostMapping("/login")
+    @PostMapping("login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
         try {
             return ResponseEntity.ok(authService.login(request));
@@ -29,7 +29,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/access")
+    @PostMapping("access")
     public ResponseEntity<JwtResponse> access(@RequestBody RefreshRequest request) {
         try {
             return ResponseEntity.ok(authService.getAccessToken(request.getToken()));
@@ -39,7 +39,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/refresh")
+    @PostMapping("refresh")
     public ResponseEntity<JwtResponse> refresh(@RequestBody RefreshRequest request) {
         try {
             return ResponseEntity.ok(authService.refresh(request.getToken()));

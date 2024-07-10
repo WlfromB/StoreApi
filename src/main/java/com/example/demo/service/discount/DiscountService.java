@@ -18,5 +18,5 @@ public interface DiscountService {
 
     Discount saveDiscount(DiscountDto discount) throws Exception;
 
-    Page<Discount> getAll(Pageable pageable);
+    Page<Discount> getAll(Pageable pageable) throws Exception;
 }

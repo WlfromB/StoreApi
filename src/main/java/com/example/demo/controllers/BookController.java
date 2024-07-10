@@ -40,6 +40,7 @@ public class BookController {
         try {
             return ResponseEntity.ok(bookService.getBookById(id));
         } catch (Exception e) {
+            e.printStackTrace();
             log.error(e.getMessage());
             return ResponseEntity.notFound().build();
         }
@@ -53,7 +54,7 @@ public class BookController {
             Pageable pageable = pageableCreator.create(paginationParams);
             return ResponseEntity.ok(bookService.getBooksByAuthors(authorId, pageable));
         } catch (Exception e) {
-            log.error("Books not found");
+            log.error(e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }

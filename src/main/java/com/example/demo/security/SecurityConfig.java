@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.Manager;
 import org.springframework.context.annotation.Bean;
@@ -43,7 +44,7 @@ public class SecurityConfig {
                     .authorizeHttpRequests(request-> request
                             .requestMatchers("/auth/**", "/user").permitAll()
                             .requestMatchers(HttpMethod.POST, "/discount").hasAnyAuthority("Author", "Admin")
-                            .requestMatchers("/book/**").hasAuthority("Admin")
+                            .requestMatchers(HttpMethod.POST,"/book").hasAuthority("Admin")
                             .anyRequest().authenticated())
                     .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

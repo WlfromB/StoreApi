@@ -1,19 +1,28 @@
 package com.example.demo.service.book;
 
+import com.example.demo.cache.PageDeserializer;
 import com.example.demo.dao.AuthorRepository;
 import com.example.demo.dao.BookRepository;
 import com.example.demo.dto.BookDto;
 import com.example.demo.entities.Author;
 import com.example.demo.entities.Book;
+import com.example.demo.service.cache.CacheService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 
@@ -23,20 +32,37 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
+    private final CacheService cacheService;
+    private final int ttl = 600; // time in seconds 
 
     @Override
     @Transactional
     public Book getBookById(long id) throws Exception {
-        return bookRepository.findById(id)
-                .orElseThrow(()->new Exception("Book not found"));
+        String key = "book:%d".formatted(id);
+        Book book = cacheService.getFromCache(key, new TypeReference<Book>() {
+        });
+        if (book == null) {
+            book = bookRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+            cacheService.setToCache(key, book, ttl);
+        }
+        return book;
     }
 
     @Override
     @Transactional
     public Page<Book> getAllBooks(Pageable pageable) throws Exception {
-        Page<Book> books = bookRepository.findAll(pageable);
-        if (books.isEmpty()) {
-            throw new Exception("No books found");
+        String key = "all-books:%d:%d".formatted(pageable.getPageNumber(), pageable.getPageSize());
+        PageDeserializer<Book> books = cacheService
+                .getFromCache(key, new TypeReference<PageDeserializer<Book>>() {
+                });
+        if (books == null) {
+            books = new PageDeserializer<>(bookRepository.findAll(pageable));
+            if (books.isEmpty()) {
+                throw new IllegalArgumentException("No books found");
+            }
+            cacheService.setToCache(key, books, ttl);
+        } else {
         }
         return books;
     }
@@ -50,9 +76,17 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public Page<Book> getBooksByAuthors(List<Long> authorIds, Pageable pageable) throws Exception {
-        Page<Book> books = bookRepository.findBookByAuthors(authorIds, pageable);
-        if (books.isEmpty()) {
-            throw new Exception("No books found");
+        String key = "book-by-authors:%s".formatted(authorIds.toString());
+        PageDeserializer<Book> books = cacheService
+                .getFromCache(key, new TypeReference<PageDeserializer<Book>>() {
+                });
+        if (books == null) {
+            books = new PageDeserializer<>(bookRepository.findBookByAuthors(authorIds, pageable));
+            if (books.isEmpty()) {
+                throw new IllegalArgumentException("No books found");
+            }
+            cacheService.setToCache(key, books, ttl);
+        } else {
         }
         return books;
     }
@@ -60,9 +94,9 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public Book setAuthors(Long bookId, List<Long> authorIds) throws Exception {
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new Exception("Book not found"));
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("Book not found"));
         for (Long authorId : authorIds) {
-            Author author = authorRepository.findById(authorId).orElseThrow(() -> new Exception("Author not found"));
+            Author author = authorRepository.findById(authorId).orElseThrow(() -> new IllegalArgumentException("Author not found"));
             book.getAuthors().add(author);
             author.getBooks().add(book);
         }
