@@ -4,5 +4,21 @@ services:
     image: redis:7-alpine
     container_name: redis
     ports:
-      - 6379:6379
+      - "6379:6379"
+    volumes:
+      - redis_cache_data:/cache/data
     
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+        
+volumes:
+  postgres_data:
+  redis_cache_data:

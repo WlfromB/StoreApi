@@ -44,7 +44,7 @@ public class SecurityConfig {
                     .authorizeHttpRequests(request-> request
                             .requestMatchers("/auth/**", "/user").permitAll()
                             .requestMatchers(HttpMethod.POST, "/discount").hasAnyAuthority("Author", "Admin")
-                            .requestMatchers(HttpMethod.POST,"/book").hasAuthority("Admin")
+                            .requestMatchers(HttpMethod.POST,"/book").hasAnyAuthority("Admin", "Author")
                             .anyRequest().authenticated())
                     .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
