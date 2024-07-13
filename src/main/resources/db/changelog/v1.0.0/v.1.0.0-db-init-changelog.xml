@@ -1,0 +1,120 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="WlfromB (generated)" id="1720867568809-1">
+        <createTable tableName="authors">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="authorsPK"/>
+            </column>
+            <column name="day_of_birthday" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="firstname" type="VARCHAR(255)"/>
+            <column name="lastname" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-2">
+        <createTable tableName="authors_books">
+            <column name="author_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="authors_booksPK"/>
+            </column>
+            <column name="book_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="authors_booksPK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-3">
+        <createTable tableName="books">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="booksPK"/>
+            </column>
+            <column name="date_created" type="date"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="number_pages" type="INTEGER"/>
+            <column name="price" type="numeric(10, 2)"/>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-4">
+        <createTable tableName="discounts">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="discountsPK"/>
+            </column>
+            <column name="date_of_sale_end" type="date"/>
+            <column name="date_of_sale_start" type="date"/>
+            <column name="dimension_of_sale" type="numeric(4, 2)"/>
+            <column name="book_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-5">
+        <createTable tableName="roles">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="rolesPK"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-6">
+        <createTable tableName="user_roles">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_rolesPK"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_rolesPK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-7">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="usersPK"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="login" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-8">
+        <addUniqueConstraint columnNames="title" constraintName="UC_BOOKSTITLE_COL" tableName="books"/>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-9">
+        <addUniqueConstraint columnNames="name" constraintName="UC_ROLESNAME_COL" tableName="roles"/>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-10">
+        <addUniqueConstraint columnNames="author_id" constraintName="UC_USERSAUTHOR_ID_COL" tableName="users"/>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-11">
+        <addUniqueConstraint columnNames="email" constraintName="UC_USERSEMAIL_COL" tableName="users"/>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-12">
+        <addUniqueConstraint columnNames="login" constraintName="UC_USERSLOGIN_COL" tableName="users"/>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-13">
+        <addForeignKeyConstraint baseColumnNames="author_id" baseTableName="authors_books" constraintName="FK1qmg0jp4gtkls4bn52xhg4jnf" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="authors" validate="true"/>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-14">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_roles" constraintName="FKh8ciramu9cc9q3qcqiv4ue8a6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="roles" validate="true"/>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-15">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_roles" constraintName="FKhfh9dx7w3ubf1co1vdev94g3f" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-16">
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="authors_books" constraintName="FKhljw0x9o8s80uce55w3iqhlqk" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="books" validate="true"/>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-17">
+        <addForeignKeyConstraint baseColumnNames="author_id" baseTableName="users" constraintName="FKngn4hvglcrglrv2fibtmtto6g" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="authors" validate="true"/>
+    </changeSet>
+    <changeSet author="WlfromB (generated)" id="1720867568809-18">
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="discounts" constraintName="FKonpj4hkvlj5qq15gku3f1fkli" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="books" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
