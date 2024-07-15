@@ -2,6 +2,7 @@
 package com.example.demo.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,6 +16,7 @@ import java.util.Set;
 @Table(name = "roles")
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = "users")
+@Schema(description = "Сущность роли")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

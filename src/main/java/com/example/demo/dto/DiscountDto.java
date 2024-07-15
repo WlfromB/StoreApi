@@ -2,6 +2,7 @@ package com.example.demo.dto;
 
 import com.example.demo.entities.Book;
 import com.example.demo.entities.Discount;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 
 @Data
 @Component
+@Schema(description = "Класс для добавления скидки")
 public class DiscountDto {
     @FutureOrPresent
     private LocalDate dateOfSaleStart;

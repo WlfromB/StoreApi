@@ -5,6 +5,9 @@ import com.example.demo.entities.Discount;
 import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.discount.DiscountService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +22,16 @@ import java.time.LocalDate;
 @RequestMapping("/discount")
 @Slf4j
 @RequiredArgsConstructor
+@Tag(name = "Методы работы со скидками")
 public class DiscountController {
     private final DiscountService discountService;
     private final PageableCreator pageableCreator;
 
+    @Operation(
+            summary = "Получения пользователя по email/login",
+            description = "Позволяет получить пользователя по email/login"
+    )
+    @SecurityRequirement(name = "JWT")
     @PostMapping
     public ResponseEntity<Discount> discount(@Valid @RequestBody DiscountDto discount) {
         try {
@@ -33,6 +42,11 @@ public class DiscountController {
         }
     }
 
+    @Operation(
+            summary = "Получение скидок",
+            description = "Позволяет получить скидки по id автора"
+    )
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/author")
     public ResponseEntity<Page<Discount>> getDiscountByAuthorId(
             @RequestParam Long id,
@@ -46,6 +60,11 @@ public class DiscountController {
         }
     }
 
+    @Operation(
+            summary = "Получение скидок",
+            description = "Позволяет получить скидки по дате"
+    )
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/date")
     public ResponseEntity<Page<Discount>> getDiscountByDate(
             @RequestParam LocalDate date,
@@ -59,6 +78,11 @@ public class DiscountController {
         }
     }
 
+    @Operation(
+            summary = "Получение скидок",
+            description = "Позволяет получить скидки по id книги и дате"
+    )
+    @SecurityRequirement(name = "JWT")
     @GetMapping
     public ResponseEntity<Page<Discount>> getDiscountsByBookAndDate(
             @RequestParam Long bookId,
@@ -74,6 +98,11 @@ public class DiscountController {
         }
     }
 
+    @Operation(
+            summary = "Получение скидок",
+            description = "Позволяет получить скидки по id книги"
+    )
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/book")
     public ResponseEntity<Page<Discount>> getDiscountByBook(
             @RequestParam Long bookId,
@@ -87,6 +116,11 @@ public class DiscountController {
         }
     }
 
+    @Operation(
+            summary = "Получение скидок",
+            description = "Позволяет получить скидки (страницу)"
+    )
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/discounts")
     public ResponseEntity<Page<Discount>> getAllDiscounts(
             @ModelAttribute PaginationParams paginationParams) {

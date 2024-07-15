@@ -1,6 +1,7 @@
 package com.example.demo.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @EqualsAndHashCode(exclude = "roles")
+@Schema(description = "Сущность пользователя")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

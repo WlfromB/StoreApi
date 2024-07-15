@@ -2,6 +2,7 @@ package com.example.demo.dto;
 
 import com.example.demo.entities.Author;
 import com.example.demo.entities.Book;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Data
+@Schema(description = "Класс для добавления книги")
 public class BookDto {
     @NotBlank
     private String title;

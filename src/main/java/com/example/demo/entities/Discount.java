@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 @Table(name = "discounts")
+@Schema(description = "Сущность скидки")
 public class Discount {
     private final static String titleForAll = "_all";
 

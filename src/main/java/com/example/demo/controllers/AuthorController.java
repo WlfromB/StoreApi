@@ -5,6 +5,9 @@ import com.example.demo.entities.Author;
 import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.author.AuthorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +20,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/author")
 @Slf4j
 @RequiredArgsConstructor
+@Tag(name = "Методы работы с авторами")
 public class AuthorController {
     private final AuthorService authorService;
     private final PageableCreator pageableCreator;
 
+    @Operation(
+            summary = "Получение автора",
+            description = "Позволяет получить автора"
+    )
+    @SecurityRequirement(name = "JWT")
     @GetMapping
     public ResponseEntity<Author> getAuthor(@RequestParam long id) {
         try {
@@ -30,6 +39,11 @@ public class AuthorController {
         }
     }
 
+    @Operation(
+            summary = "Получение авторов",
+            description = "Позволяет получить авторов(страница)"
+    )
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/authors")
     public ResponseEntity<Page<Author>> getAuthors(
             @ModelAttribute PaginationParams paginationParams) {
@@ -41,6 +55,11 @@ public class AuthorController {
         }
     }
 
+    @Operation(
+            summary = "Добавлени книги автору",
+            description = "Позволяет добавить книгу автору по id"
+    )
+    @SecurityRequirement(name = "JWT")
     @PatchMapping("/{id}")
     public ResponseEntity<String> updateAuthor(
             @Valid @RequestBody BookDto book,

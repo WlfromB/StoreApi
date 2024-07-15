@@ -2,6 +2,7 @@ package com.example.demo.dto;
 
 import com.example.demo.entities.Author;
 import com.example.demo.entities.Book;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@Hidden
 public class BookResponse {
     private String title;
     private String description;

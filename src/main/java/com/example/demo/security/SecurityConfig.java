@@ -40,11 +40,13 @@ public class SecurityConfig {
                      corsConfiguration.addAllowedHeader("*");
                      return corsConfiguration;
                     }
-                    ))
+                    ))  
                     .authorizeHttpRequests(request-> request
                             .requestMatchers("/auth/**", "/user").permitAll()
+                            .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                             .requestMatchers(HttpMethod.POST, "/discount").hasAnyAuthority("Author", "Admin")
                             .requestMatchers(HttpMethod.POST,"/book").hasAnyAuthority("Admin", "Author")
+                            .requestMatchers(HttpMethod.PATCH, "user/**").hasAnyAuthority( "Admin")
                             .anyRequest().authenticated())
                     .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

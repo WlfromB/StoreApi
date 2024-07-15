@@ -9,6 +9,9 @@ import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.author.AuthorService;
 import com.example.demo.service.user.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +24,16 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@Tag(name = "Методы работы с пользователями")
 public class UserController {
     private final UserService userService;
     private final AuthorService authorService;
     private final PageableCreator pageableCreator;
 
+    @Operation(
+            summary = "Создание пользователя",
+            description = "Позволяет зарегистрировать пользователя"
+    )
     @PostMapping
     public ResponseEntity<User> createUser(@Valid @RequestBody UserDto user) {
         try {
@@ -36,6 +44,11 @@ public class UserController {
         }
     }
 
+    @Operation(
+            summary = "Получение пользователей",
+            description = "Позволяет страницу пользователей"
+    )
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/users")
     public ResponseEntity<Page<User>> getAllUsers(
             @ModelAttribute PaginationParams paginationParams) {
@@ -47,7 +60,12 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    
+    @Operation(
+            summary = "Получение пользователя",
+            description = "Позволяет получить пользователя по id"
+    )
+    @SecurityRequirement(name = "JWT")
     @GetMapping
     public ResponseEntity<User> getUser(@RequestParam long id) {
         try {
@@ -58,6 +76,11 @@ public class UserController {
         }
     }
 
+    @Operation(
+            summary = "Регистрация автора",
+            description = "Позволяет зарегистрировать автора по id пользователя"
+    )
+    @SecurityRequirement(name = "JWT")
     @PostMapping("/{id}")
     public ResponseEntity<Author> createAuthor(@Valid @RequestBody AuthorDto author,
                                                @PathVariable long id) {
@@ -71,6 +94,11 @@ public class UserController {
         }
     }
 
+    @Operation(
+            summary = "Смена данных пользователя",
+            description = "Позволяет изменить роль пользователя"
+    )
+    @SecurityRequirement(name = "JWT")
     @PatchMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable long id,
                                            @RequestBody Role role) {
@@ -83,6 +111,11 @@ public class UserController {
         }
     }
 
+    @Operation(
+            summary = "Получения пользователя по email/login",
+            description = "Позволяет получить пользователя по email/login"
+    )
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/email-or-login")
     public ResponseEntity<User> getUserByEmailOrLogin(@RequestParam(name = "email_or_login") String emailOrLogin) {
         try {

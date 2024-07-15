@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import com.example.demo.entities.Author;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import lombok.Data;
@@ -8,6 +9,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
+@Schema(description = "Класс для добавления автора")
 public class AuthorDto {
     @NotBlank
     private String firstName;

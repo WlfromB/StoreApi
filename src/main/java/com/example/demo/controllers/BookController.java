@@ -5,6 +5,9 @@ import com.example.demo.entities.Book;
 import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.book.BookService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +22,16 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/book")
 @RequiredArgsConstructor
+@Tag(name = "Методы работы с книгами")
 public class BookController {
     private final BookService bookService;
     private final PageableCreator pageableCreator;
 
+    @Operation(
+            summary = "Получение книг",
+            description = "Позволяет получить книги (страницу)"
+    )
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/books")
     public ResponseEntity<Page<Book>> getAllBooks(
             @ModelAttribute PaginationParams paginationParams) {
@@ -35,6 +44,11 @@ public class BookController {
         }
     }
 
+    @Operation(
+            summary = "Получение книги",
+            description = "Позволяет получить книги по id"
+    )
+    @SecurityRequirement(name = "JWT")
     @GetMapping
     public ResponseEntity<Book> getBook(@RequestParam long id) {
         try {
@@ -46,6 +60,11 @@ public class BookController {
         }
     }
 
+    @Operation(
+            summary = "Получение книг",
+            description = "Позволяет получить книги по id авторов"
+    )
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/authors")
     public ResponseEntity<Page<Book>> getBooksByAuthors(
             @RequestParam List<Long> authorId,
@@ -59,6 +78,11 @@ public class BookController {
         }
     }
 
+    @Operation(
+            summary = "Добавление книги",
+            description = "Позволяет добавить книгу"
+    )
+    @SecurityRequirement(name = "JWT")
     @PostMapping
     public ResponseEntity<Book> createBook(@Valid @RequestBody BookDto book) {
         try {
@@ -69,6 +93,11 @@ public class BookController {
         }
     }
 
+    @Operation(
+            summary = "Обновление книги",
+            description = "Позволяет добавить книге по её id список авторов"
+    )
+    @SecurityRequirement(name = "JWT")
     @PatchMapping("/{id}/authors")
     public ResponseEntity<Book> updateBook(@RequestBody List<Long> authorIds,
                                            @PathVariable long id) {

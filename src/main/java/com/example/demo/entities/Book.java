@@ -1,6 +1,7 @@
 package com.example.demo.entities;
 
 import com.fasterxml.jackson.annotation.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Entity
 @Table(name = "books")
 @EqualsAndHashCode(exclude = "authors")
+@Schema(description = "Сущность книги")
 public class Book implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
