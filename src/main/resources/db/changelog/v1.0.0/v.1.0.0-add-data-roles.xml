@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="add-data-roles-1" author="WlfromB">
+        <insert tableName="roles">
+            <column name="name" value="Author"/>
+        </insert>
+        <rollback>
+            <delete tableName="roles">
+                <where>name='Author'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="add-data-roles-2" author="WlfromB">
+        <insert tableName="roles">
+            <column name="name" value="Customer"/>
+        </insert>
+        <rollback>
+            <delete tableName="roles">
+                <where>name='Customer'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="add-data-roles-3" author="WlfromB">
+        <insert tableName="roles">
+            <column name="name" value="SuperUser"/>
+        </insert>
+        <rollback>
+            <delete tableName="roles">
+                <where>name='SuperUser'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="add-data-roles-4" author="WlfromB">
+        <insert tableName="roles">
+            <column name="name" value="Admin"/>
+        </insert>
+        <rollback>
+            <delete tableName="roles">
+                <where>name='Admin'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

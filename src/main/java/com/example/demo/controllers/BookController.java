@@ -6,6 +6,7 @@ import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.book.BookService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -68,7 +69,9 @@ public class BookController {
     @GetMapping("/authors")
     public ResponseEntity<Page<Book>> getBooksByAuthors(
             @RequestParam List<Long> authorId,
-            @ModelAttribute PaginationParams paginationParams) {
+            @ModelAttribute @Parameter(description = "Параметры страницы. " +
+                    "Параметры являются необязательными." +
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
         try {
             Pageable pageable = pageableCreator.create(paginationParams);
             return ResponseEntity.ok(bookService.getBooksByAuthors(authorId, pageable));

@@ -6,6 +6,7 @@ import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.discount.DiscountService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -50,7 +51,9 @@ public class DiscountController {
     @GetMapping("/author")
     public ResponseEntity<Page<Discount>> getDiscountByAuthorId(
             @RequestParam Long id,
-            @ModelAttribute PaginationParams paginationParams) {
+            @ModelAttribute @Parameter(description = "Параметры страницы. " +
+                    "Параметры являются необязательными." +
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
         try {
             Pageable pageable = pageableCreator.create(paginationParams);
             return ResponseEntity.ok(discountService.getDiscountByAuthor(id, pageable));
@@ -67,8 +70,11 @@ public class DiscountController {
     @SecurityRequirement(name = "JWT")
     @GetMapping("/date")
     public ResponseEntity<Page<Discount>> getDiscountByDate(
-            @RequestParam LocalDate date,
-            @ModelAttribute PaginationParams paginationParams) {
+            @RequestParam @Parameter(description = "Дата в формате \"yyyy-mm-dd\"",
+                    example = "2024-07-18") LocalDate date,
+            @ModelAttribute @Parameter(description = "Параметры страницы. " +
+                    "Параметры являются необязательными." +
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
         try {
             Pageable pageable = pageableCreator.create(paginationParams);
             return ResponseEntity.ok(discountService.getDiscountsByDate(date, pageable));
@@ -86,8 +92,11 @@ public class DiscountController {
     @GetMapping
     public ResponseEntity<Page<Discount>> getDiscountsByBookAndDate(
             @RequestParam Long bookId,
-            @RequestParam LocalDate date,
-            @ModelAttribute PaginationParams paginationParams) {
+            @RequestParam @Parameter(description = "Дата в формате \"yyyy-mm-dd\"", 
+                    example = "2024-07-18") LocalDate date,
+            @ModelAttribute @Parameter(description = "Параметры страницы. " +
+                    "Параметры являются необязательными." +
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
         try {
             Pageable pageable = pageableCreator.create(paginationParams);
             return ResponseEntity.ok(discountService.getDiscountByBookAndDate(
@@ -106,7 +115,9 @@ public class DiscountController {
     @GetMapping("/book")
     public ResponseEntity<Page<Discount>> getDiscountByBook(
             @RequestParam Long bookId,
-            @ModelAttribute PaginationParams paginationParams) {
+            @ModelAttribute @Parameter(description = "Параметры страницы. " +
+                    "Параметры являются необязательными." +
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
         try {
             Pageable pageable = pageableCreator.create(paginationParams);
             return ResponseEntity.ok(discountService.getDiscountsByBook(bookId, pageable));
@@ -123,7 +134,9 @@ public class DiscountController {
     @SecurityRequirement(name = "JWT")
     @GetMapping("/discounts")
     public ResponseEntity<Page<Discount>> getAllDiscounts(
-            @ModelAttribute PaginationParams paginationParams) {
+            @ModelAttribute @Parameter(description = "Параметры страницы. " +
+                    "Параметры являются необязательными." +
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
         try {
             Pageable pageable = pageableCreator.create(paginationParams);
             return ResponseEntity.ok(discountService.getAll(pageable));

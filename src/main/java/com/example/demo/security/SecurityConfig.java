@@ -42,7 +42,8 @@ public class SecurityConfig {
                     }
                     ))  
                     .authorizeHttpRequests(request-> request
-                            .requestMatchers("/auth/**", "/user").permitAll()
+                            .requestMatchers("/auth/**" ).permitAll()
+                            .requestMatchers(HttpMethod.POST, "/user").permitAll()
                             .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                             .requestMatchers(HttpMethod.POST, "/discount").hasAnyAuthority("Author", "Admin")
                             .requestMatchers(HttpMethod.POST,"/book").hasAnyAuthority("Admin", "Author")

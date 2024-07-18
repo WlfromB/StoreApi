@@ -10,6 +10,7 @@ import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.author.AuthorService;
 import com.example.demo.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -51,7 +52,9 @@ public class UserController {
     @SecurityRequirement(name = "JWT")
     @GetMapping("/users")
     public ResponseEntity<Page<User>> getAllUsers(
-            @ModelAttribute PaginationParams paginationParams) {
+            @ModelAttribute @Parameter(description = "Параметры страницы. " +
+                    "Параметры являются необязательными." +
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
         try {
             Pageable pageable = pageableCreator.create(paginationParams);
             return ResponseEntity.ok(userService.findAll(pageable));
