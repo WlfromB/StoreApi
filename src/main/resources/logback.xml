@@ -1,0 +1,29 @@
+<configuration>
+    <!-- Консольный аппендер -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Шаблон для вывода логов в консоль -->
+            <pattern>%date{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5level %thread --- [%logger{36}] [%mdc] : %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Файловый аппендер для ошибок -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/errors.log</file>
+        <append>true</append>
+        <encoder>
+            <!-- Шаблон для вывода логов в файл -->
+            <pattern>%date{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5level %thread --- [%logger{36}] [%mdc] : %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Логгер для ошибок -->
+    <logger name="com.yourpackage" level="ERROR" additivity="false">
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <!-- Корневой логгер -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+</configuration>
