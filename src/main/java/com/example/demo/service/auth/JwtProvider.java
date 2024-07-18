@@ -64,15 +64,15 @@ public class JwtProvider {
             return true;
         }
         catch (ExpiredJwtException expEx) {
-            log.error("Token expired", expEx);
+            log.error("Token expired {}", expEx.getMessage());
         } catch (UnsupportedJwtException unsEx) {
-            log.error("Unsupported jwt", unsEx);
+            log.error("Unsupported jwt {}", unsEx.getMessage());
         } catch (MalformedJwtException mjEx) {  
-            log.error("Malformed jwt", mjEx);
+            log.error("Malformed jwt {}", mjEx.getMessage());
         } catch (SignatureException sEx) {
-            log.error("Invalid signature", sEx);
+            log.error("Invalid signature {}", sEx.getMessage());
         } catch (Exception e) {
-            log.error("invalid token", e);
+            log.error("invalid token {}", e.getMessage());
         }
         return false;        
     }
