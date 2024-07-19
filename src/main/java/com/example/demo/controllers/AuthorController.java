@@ -32,12 +32,8 @@ public class AuthorController {
     )
     @SecurityRequirement(name = "JWT")
     @GetMapping
-    public ResponseEntity<Author> getAuthor(@RequestParam long id) {
-        try {
-            return ResponseEntity.ok(authorService.getAuthorById(id));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Author> getAuthor(@RequestParam long id) throws Exception {
+        return ResponseEntity.ok(authorService.getAuthorById(id));
     }
 
     @Operation(
@@ -49,13 +45,9 @@ public class AuthorController {
     public ResponseEntity<Page<Author>> getAuthors(
             @ModelAttribute @Parameter(description = "Параметры страницы. " +
                     "Параметры являются необязательными." +
-                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
-        try {
-            Pageable pageable = pageableCreator.create(paginationParams);
-            return ResponseEntity.ok(authorService.getAllAuthors(pageable));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) throws Exception {
+        Pageable pageable = pageableCreator.create(paginationParams);
+        return ResponseEntity.ok(authorService.getAllAuthors(pageable));
     }
 
     @Operation(
@@ -66,12 +58,8 @@ public class AuthorController {
     @PatchMapping("/{id}")
     public ResponseEntity<String> updateAuthor(
             @Valid @RequestBody BookDto book,
-            @PathVariable(name = "id") long id) {
-        try {
-            authorService.addBook(book, id);
-            return ResponseEntity.ok("successfully updated author");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+            @PathVariable(name = "id") long id) throws Exception {
+        authorService.addBook(book, id);
+        return ResponseEntity.ok("successfully updated author");
     }
 }

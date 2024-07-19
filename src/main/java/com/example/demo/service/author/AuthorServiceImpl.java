@@ -15,11 +15,11 @@ import com.example.demo.service.cache.CacheService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
 
 @Service
 @Slf4j
@@ -40,7 +40,7 @@ public class AuthorServiceImpl implements AuthorService {
         });
         if (author == null) {
             author = authorRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("Author not found"));
+                    .orElseThrow(() -> new NotFoundException("Author not found"));
             cacheService.setToCache(key, author, ttl);
         }
         return author;
@@ -56,7 +56,7 @@ public class AuthorServiceImpl implements AuthorService {
         if (authors == null) {
             authors = authorRepository.findAll(pageable);
             if (authors.isEmpty()) {
-                throw new IllegalArgumentException("Authors not found");
+                throw new NotFoundException("Authors not found");
             }
             cacheService.setToCache(key, authors, ttl);
         }
@@ -71,7 +71,7 @@ public class AuthorServiceImpl implements AuthorService {
         if (user != null) {
             user.setAuthor(authorEntity);
             Role role = roleRepository.findByName("Author")
-                    .orElseThrow(() -> new IllegalArgumentException("Role not found"));
+                    .orElseThrow(() -> new NotFoundException("Role not found"));
             user.getRoles().add(role);
             role.getUsers().add(user);
             roleRepository.save(role);

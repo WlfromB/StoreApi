@@ -14,7 +14,7 @@
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>
-                %clr(%date{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}){faint} %clr(%-5level){INFO_COLOR=green, WARN_COLOR=yellow, ERROR_COLOR=red, DEBUG_COLOR=magenta, DEFAULT_COLOR=white}  %clr(%thread){faint} --- %clr([%logger{36}]){cyan} %clr([%mdc]){faint} : %msg%n%wex
+                %clr(%date{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}){faint}\t%clr(%-5level){INFO_COLOR=green, WARN_COLOR=yellow, ERROR_COLOR=red, DEBUG_COLOR=magenta, DEFAULT_COLOR=white}\t%clr(%thread){faint}\t---\t%clr([%logger{36}]){cyan}\t%clr([%mdc]){faint}\t:\t%msg%n%wex
             </pattern>
         </encoder>
     </appender>

@@ -11,16 +11,16 @@ import lombok.Data;
 @Schema(description = "Класс для добавления пользователя")
 public class UserDto {
 
-    @NotBlank
+    @NotBlank(message = "Логин не может быть пустым. Минимальный (кол-во символов) - 5, максимальный - 20")
     @Size(min = 5, max = 20)
     private String login;
 
-    @NotBlank
+    @NotBlank(message = "Email не может быть пустым. Пример: oleg@gmail.com")
     @Pattern(regexp = "^[\\w.-]+@[a-zA-Z\\d.-]+\\.[a-zA-Z]{2,6}$")
     @Schema(example = "oleg@gmail.com")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Не может быть пустым. Минимальный (кол-во символов) - 8, максимальный - 20")
     @Size(min = 8, max = 20)
     private String password;
 

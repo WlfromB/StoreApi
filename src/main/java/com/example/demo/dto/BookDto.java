@@ -1,16 +1,12 @@
 package com.example.demo.dto;
 
-import com.example.demo.entities.Author;
 import com.example.demo.entities.Book;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Data
 @Schema(description = "Класс для добавления книги")
@@ -30,8 +26,8 @@ public class BookDto {
     @Digits(integer = 10, fraction = 2)
     @DecimalMin("0.01")
     private BigDecimal price;
-    
-    public Book from(){
+
+    public Book from() {
         Book book = new Book();
         book.setTitle(title);
         book.setDescription(description);
@@ -40,5 +36,5 @@ public class BookDto {
         book.setPrice(price);
         return book;
     }
-    
+
 }

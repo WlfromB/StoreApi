@@ -8,12 +8,12 @@ import com.example.demo.dto.DiscountDto;
 import com.example.demo.entities.Discount;
 import com.example.demo.service.cache.CacheService;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.function.Supplier;
@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 @Service
 @RequiredArgsConstructor
 public class DiscountServiceImpl implements DiscountService {
-    private final static Supplier<Exception> NOT_FOUND_EXCEPTION_SUPPLIER = () -> new IllegalArgumentException("Not Found");
+    private final static Supplier<Exception> NOT_FOUND_EXCEPTION_SUPPLIER = () -> new NotFoundException("Not Found");
     private final DiscountRepository discountRepository;
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;

@@ -35,14 +35,9 @@ public class BookController {
     @SecurityRequirement(name = "JWT")
     @GetMapping("/books")
     public ResponseEntity<Page<Book>> getAllBooks(
-            @ModelAttribute PaginationParams paginationParams) {
-        try {
-            Pageable pageable = pageableCreator.create(paginationParams);
-            return ResponseEntity.ok(bookService.getAllBooks(pageable));
-        } catch (Exception e) {
-            log.error("Books not found");
-            return ResponseEntity.notFound().build();
-        }
+            @ModelAttribute PaginationParams paginationParams) throws Exception {
+        Pageable pageable = pageableCreator.create(paginationParams);
+        return ResponseEntity.ok(bookService.getAllBooks(pageable));
     }
 
     @Operation(
@@ -51,14 +46,8 @@ public class BookController {
     )
     @SecurityRequirement(name = "JWT")
     @GetMapping
-    public ResponseEntity<Book> getBook(@RequestParam long id) {
-        try {
-            return ResponseEntity.ok(bookService.getBookById(id));
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Book> getBook(@RequestParam long id) throws Exception {
+        return ResponseEntity.ok(bookService.getBookById(id));
     }
 
     @Operation(
@@ -71,14 +60,9 @@ public class BookController {
             @RequestParam List<Long> authorId,
             @ModelAttribute @Parameter(description = "Параметры страницы. " +
                     "Параметры являются необязательными." +
-                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
-        try {
-            Pageable pageable = pageableCreator.create(paginationParams);
-            return ResponseEntity.ok(bookService.getBooksByAuthors(authorId, pageable));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) throws Exception {
+        Pageable pageable = pageableCreator.create(paginationParams);
+        return ResponseEntity.ok(bookService.getBooksByAuthors(authorId, pageable));
     }
 
     @Operation(
@@ -88,12 +72,7 @@ public class BookController {
     @SecurityRequirement(name = "JWT")
     @PostMapping
     public ResponseEntity<Book> createBook(@Valid @RequestBody BookDto book) {
-        try {
-            return ResponseEntity.ok(bookService.saveBook(book));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(bookService.saveBook(book));
     }
 
     @Operation(
@@ -103,12 +82,7 @@ public class BookController {
     @SecurityRequirement(name = "JWT")
     @PatchMapping("/{id}/authors")
     public ResponseEntity<Book> updateBook(@RequestBody List<Long> authorIds,
-                                           @PathVariable long id) {
-        try {
-            return ResponseEntity.ok(bookService.setAuthors(id, authorIds));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
+                                           @PathVariable long id) throws Exception {
+        return ResponseEntity.ok(bookService.setAuthors(id, authorIds));
     }
 }

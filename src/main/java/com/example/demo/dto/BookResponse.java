@@ -3,7 +3,6 @@ package com.example.demo.dto;
 import com.example.demo.entities.Author;
 import com.example.demo.entities.Book;
 import io.swagger.v3.oas.annotations.Hidden;
-import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -20,7 +19,7 @@ public class BookResponse {
     private LocalDate dateCreated;
     private Set<Author> authors = new HashSet<>();
     private BigDecimal price;
-    
+
     public BookResponse(Book book) {
         this.title = book.getTitle();
         this.description = book.getDescription();

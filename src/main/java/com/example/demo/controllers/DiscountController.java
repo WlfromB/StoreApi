@@ -34,13 +34,8 @@ public class DiscountController {
     )
     @SecurityRequirement(name = "JWT")
     @PostMapping
-    public ResponseEntity<Discount> discount(@Valid @RequestBody DiscountDto discount) {
-        try {
-            return ResponseEntity.ok(discountService.saveDiscount(discount));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<Discount> discount(@Valid @RequestBody DiscountDto discount) throws Exception {
+        return ResponseEntity.ok(discountService.saveDiscount(discount));
     }
 
     @Operation(
@@ -53,14 +48,9 @@ public class DiscountController {
             @RequestParam Long id,
             @ModelAttribute @Parameter(description = "Параметры страницы. " +
                     "Параметры являются необязательными." +
-                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
-        try {
-            Pageable pageable = pageableCreator.create(paginationParams);
-            return ResponseEntity.ok(discountService.getDiscountByAuthor(id, pageable));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) throws Exception {
+        Pageable pageable = pageableCreator.create(paginationParams);
+        return ResponseEntity.ok(discountService.getDiscountByAuthor(id, pageable));
     }
 
     @Operation(
@@ -74,14 +64,9 @@ public class DiscountController {
                     example = "2024-07-18") LocalDate date,
             @ModelAttribute @Parameter(description = "Параметры страницы. " +
                     "Параметры являются необязательными." +
-                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
-        try {
-            Pageable pageable = pageableCreator.create(paginationParams);
-            return ResponseEntity.ok(discountService.getDiscountsByDate(date, pageable));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) throws Exception {
+        Pageable pageable = pageableCreator.create(paginationParams);
+        return ResponseEntity.ok(discountService.getDiscountsByDate(date, pageable));
     }
 
     @Operation(
@@ -92,19 +77,13 @@ public class DiscountController {
     @GetMapping
     public ResponseEntity<Page<Discount>> getDiscountsByBookAndDate(
             @RequestParam Long bookId,
-            @RequestParam @Parameter(description = "Дата в формате \"yyyy-mm-dd\"", 
+            @RequestParam @Parameter(description = "Дата в формате \"yyyy-mm-dd\"",
                     example = "2024-07-18") LocalDate date,
             @ModelAttribute @Parameter(description = "Параметры страницы. " +
                     "Параметры являются необязательными." +
-                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
-        try {
-            Pageable pageable = pageableCreator.create(paginationParams);
-            return ResponseEntity.ok(discountService.getDiscountByBookAndDate(
-                    bookId, date, pageable));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) throws Exception {
+        Pageable pageable = pageableCreator.create(paginationParams);
+        return ResponseEntity.ok(discountService.getDiscountByBookAndDate(bookId, date, pageable));
     }
 
     @Operation(
@@ -117,14 +96,9 @@ public class DiscountController {
             @RequestParam Long bookId,
             @ModelAttribute @Parameter(description = "Параметры страницы. " +
                     "Параметры являются необязательными." +
-                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
-        try {
-            Pageable pageable = pageableCreator.create(paginationParams);
-            return ResponseEntity.ok(discountService.getDiscountsByBook(bookId, pageable));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) throws Exception {
+        Pageable pageable = pageableCreator.create(paginationParams);
+        return ResponseEntity.ok(discountService.getDiscountsByBook(bookId, pageable));
     }
 
     @Operation(
@@ -136,13 +110,8 @@ public class DiscountController {
     public ResponseEntity<Page<Discount>> getAllDiscounts(
             @ModelAttribute @Parameter(description = "Параметры страницы. " +
                     "Параметры являются необязательными." +
-                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
-        try {
-            Pageable pageable = pageableCreator.create(paginationParams);
-            return ResponseEntity.ok(discountService.getAll(pageable));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) throws Exception {
+        Pageable pageable = pageableCreator.create(paginationParams);
+        return ResponseEntity.ok(discountService.getAll(pageable));
     }
 }

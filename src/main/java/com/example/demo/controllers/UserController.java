@@ -36,13 +36,8 @@ public class UserController {
             description = "Позволяет зарегистрировать пользователя"
     )
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserDto user) {
-        try {
-            return ResponseEntity.ok(userService.save(user));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserDto user) throws Exception {
+        return ResponseEntity.ok(userService.save(user));
     }
 
     @Operation(
@@ -54,29 +49,20 @@ public class UserController {
     public ResponseEntity<Page<User>> getAllUsers(
             @ModelAttribute @Parameter(description = "Параметры страницы. " +
                     "Параметры являются необязательными." +
-                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams) {
-        try {
-            Pageable pageable = pageableCreator.create(paginationParams);
-            return ResponseEntity.ok(userService.findAll(pageable));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+                    " Можно указывать любые вырианты наличия параметров.") PaginationParams paginationParams)
+            throws Exception {
+        Pageable pageable = pageableCreator.create(paginationParams);
+        return ResponseEntity.ok(userService.findAll(pageable));
     }
-    
+
     @Operation(
             summary = "Получение пользователя",
             description = "Позволяет получить пользователя по id"
     )
     @SecurityRequirement(name = "JWT")
     @GetMapping
-    public ResponseEntity<User> getUser(@RequestParam long id) {
-        try {
-            return ResponseEntity.ok(userService.findById(id));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<User> getUser(@RequestParam long id) throws Exception {
+        return ResponseEntity.ok(userService.findById(id));
     }
 
     @Operation(
@@ -86,15 +72,8 @@ public class UserController {
     @SecurityRequirement(name = "JWT")
     @PostMapping("/{id}")
     public ResponseEntity<Author> createAuthor(@Valid @RequestBody AuthorDto author,
-                                               @PathVariable long id) {
-        try {
-            return ResponseEntity.ok(authorService.saveAuthor(author, id));
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-            log.error("error when creating author");
-            return ResponseEntity.badRequest().build();
-        }
+                                               @PathVariable long id) throws Exception {
+        return ResponseEntity.ok(authorService.saveAuthor(author, id));
     }
 
     @Operation(
@@ -104,14 +83,9 @@ public class UserController {
     @SecurityRequirement(name = "JWT")
     @PatchMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable long id,
-                                           @RequestBody Role role) {
-        try {
-            userService.changeRole(id, role);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+                                           @RequestBody Role role) throws Exception {
+        userService.changeRole(id, role);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(
@@ -120,12 +94,8 @@ public class UserController {
     )
     @SecurityRequirement(name = "JWT")
     @GetMapping("/email-or-login")
-    public ResponseEntity<User> getUserByEmailOrLogin(@RequestParam(name = "email_or_login") String emailOrLogin) {
-        try {
-            return ResponseEntity.ok(userService.findByEmailOrLogin(emailOrLogin));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<User> getUserByEmailOrLogin(@RequestParam(name = "email_or_login") String emailOrLogin)
+            throws Exception {
+        return ResponseEntity.ok(userService.findByEmailOrLogin(emailOrLogin));
     }
 }

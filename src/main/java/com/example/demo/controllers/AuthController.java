@@ -27,13 +27,8 @@ public class AuthController {
             description = "Позволяет получить access и refresh jwts"
     )
     @PostMapping("login")
-    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
-        try {
-            return ResponseEntity.ok(authService.login(request));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) throws Exception {
+        return ResponseEntity.ok(authService.login(request));
     }
 
     @Operation(
@@ -41,13 +36,8 @@ public class AuthController {
             description = "Позволяет обновить access токен, в случае валидного и not exprired refresh токена"
     )
     @PostMapping("access")
-    public ResponseEntity<JwtResponse> access(@RequestBody RefreshRequest request) {
-        try {
-            return ResponseEntity.ok(authService.getAccessToken(request.getToken()));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(403).build();
-        }
+    public ResponseEntity<JwtResponse> access(@RequestBody RefreshRequest request) throws Exception {
+        return ResponseEntity.ok(authService.getAccessToken(request.getToken()));
     }
 
     @Operation(
@@ -55,12 +45,7 @@ public class AuthController {
             description = "Позволяет обновить refresh токен, в случае валидного и not exprired refresh токена"
     )
     @PostMapping("refresh")
-    public ResponseEntity<JwtResponse> refresh(@RequestBody RefreshRequest request) {
-        try {
-            return ResponseEntity.ok(authService.refresh(request.getToken()));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<JwtResponse> refresh(@RequestBody RefreshRequest request) throws Exception {
+        return ResponseEntity.ok(authService.refresh(request.getToken()));
     }
 }

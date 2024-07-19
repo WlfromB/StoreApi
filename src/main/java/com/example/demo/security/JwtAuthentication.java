@@ -1,6 +1,5 @@
 package com.example.demo.security;
 
-import com.example.demo.entities.Role;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.Authentication;
@@ -8,8 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,7 +43,7 @@ public class JwtAuthentication implements Authentication {
     public boolean isAuthenticated() {
         return authenticated;
     }
-    
+
     @Override
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
         this.authenticated = isAuthenticated;

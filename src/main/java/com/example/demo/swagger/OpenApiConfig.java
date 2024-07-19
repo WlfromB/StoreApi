@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 @OpenAPIDefinition(
         info = @Info(
                 title = "Store api",
-                description = "Store" , version = "1.0.0"
+                description = "Store", version = "1.0.0"
         )
 )
 @SecurityScheme(

@@ -33,28 +33,4 @@ public class CacheServiceImpl implements CacheService {
             jedis.setex(key, ttl, json);
         }
     }
-  /* public <T> T getFromCache(String key, TypeReference<T> typeReference) {
-       try (Jedis jedis = jedisPool.getResource()) {
-           String data = jedis.get(key);
-           if (data != null) {
-               log.info("Data found in cache: " + data); // Отладочное сообщение
-               return objectMapper.readValue(data, typeReference);
-           } else {
-               log.info("No data found in cache for key: " + key); // Отладочное сообщение
-           }
-       } catch (Exception e) {
-           e.printStackTrace();
-       }
-       return null;
-   }
-
-    public void setToCache(String key, Object value, int ttl) {
-        try (Jedis jedis = jedisPool.getResource()) {
-            String data = objectMapper.writeValueAsString(value);
-            System.out.println("Saving data to cache: " + data); // Отладочное сообщение
-            jedis.setex(key, ttl, data);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
 }
