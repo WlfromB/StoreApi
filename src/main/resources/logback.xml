@@ -1,29 +1,45 @@
 <configuration>
-    <!-- Консольный аппендер -->
+    <!-- Определение правил конверсии цветов -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+
+    <!-- Цвета для различных уровней логирования -->
+    <property name="INFO_COLOR" value="green" />
+    <property name="WARN_COLOR" value="yellow" />
+    <property name="ERROR_COLOR" value="red" />
+    <property name="DEBUG_COLOR" value="magenta" />
+    <property name="DEFAULT_COLOR" value="white" />
+
+    <!-- Консольный аппендер с цветами -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <!-- Шаблон для вывода логов в консоль -->
-            <pattern>%date{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5level %thread --- [%logger{36}] [%mdc] : %msg%n</pattern>
+            <pattern>
+                %clr(%date{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}){faint} %clr(%-5level){INFO_COLOR=green, WARN_COLOR=yellow, ERROR_COLOR=red, DEBUG_COLOR=magenta, DEFAULT_COLOR=white}  %clr(%thread){faint} --- %clr([%logger{36}]){cyan} %clr([%mdc]){faint} : %msg%n%wex
+            </pattern>
         </encoder>
     </appender>
 
     <!-- Файловый аппендер для ошибок -->
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>logs/errors.log</file>
+        <maxHistory>7</maxHistory>
+        <maxFileSize>5MB</maxFileSize>
         <append>true</append>
         <encoder>
-            <!-- Шаблон для вывода логов в файл -->
-            <pattern>%date{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5level %thread --- [%logger{36}] [%mdc] : %msg%n</pattern>
+            <pattern>%date{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5level %thread --- [%logger{36}] [%mdc] : %msg%n%wex</pattern>
         </encoder>
     </appender>
 
     <!-- Логгер для ошибок -->
-    <logger name="com.yourpackage" level="ERROR" additivity="false">
+    <logger name="com.example.demo" level="ERROR" additivity="false">
         <appender-ref ref="FILE" />
     </logger>
 
-    <!-- Корневой логгер -->
+    <!-- Настройка уровня логирования и аппендеров -->
     <root level="INFO">
         <appender-ref ref="CONSOLE" />
     </root>
+
+    <!-- Логгер для Logback -->
+    <logger name="ch.qos.logback" level="ERROR" />
 </configuration>
