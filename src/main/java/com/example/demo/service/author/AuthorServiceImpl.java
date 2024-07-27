@@ -66,7 +66,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public Author saveAuthor(AuthorDto author, long userId) throws Exception {
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("User not found"));
         Author authorEntity = authorRepository.save(author.from());
         if (user != null) {
             user.setAuthor(authorEntity);
@@ -84,6 +84,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public void addBook(BookDto book, long authorId) throws Exception {
+        log.info("enter addBook");
         Author author = getAuthorById(authorId);
         Book addedBook = bookRepository.findBookByTitle(book.getTitle())
                 .orElse(book.from());

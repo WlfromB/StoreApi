@@ -16,7 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.time.LocalDate;
 
 @RestController
@@ -34,8 +36,14 @@ public class DiscountController {
     )
     @SecurityRequirement(name = "JWT")
     @PostMapping
-    public ResponseEntity<Discount> discount(@Valid @RequestBody DiscountDto discount) throws Exception {
-        return ResponseEntity.ok(discountService.saveDiscount(discount));
+    public ResponseEntity<Discount> createDiscount(@Valid @RequestBody DiscountDto discountDto) throws Exception {
+        Discount discount = discountService.saveDiscount(discountDto);
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(discount.getId())
+                .toUri();                
+        return ResponseEntity.created(uri).body(discount);
     }
 
     @Operation(

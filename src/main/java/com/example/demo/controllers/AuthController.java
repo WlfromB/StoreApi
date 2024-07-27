@@ -6,7 +6,9 @@ import com.example.demo.responses.JwtResponse;
 import com.example.demo.service.auth.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +29,7 @@ public class AuthController {
             description = "Позволяет получить access и refresh jwts"
     )
     @PostMapping("login")
-    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) throws Exception {
+    public ResponseEntity<JwtResponse> login(@Valid @RequestBody JwtRequest request) throws Exception {
         return ResponseEntity.ok(authService.login(request));
     }
 
@@ -36,7 +38,7 @@ public class AuthController {
             description = "Позволяет обновить access токен, в случае валидного и not exprired refresh токена"
     )
     @PostMapping("access")
-    public ResponseEntity<JwtResponse> access(@RequestBody RefreshRequest request) throws Exception {
+    public ResponseEntity<JwtResponse> access(@Valid @RequestBody RefreshRequest request) throws Exception {
         return ResponseEntity.ok(authService.getAccessToken(request.getToken()));
     }
 
@@ -45,7 +47,7 @@ public class AuthController {
             description = "Позволяет обновить refresh токен, в случае валидного и not exprired refresh токена"
     )
     @PostMapping("refresh")
-    public ResponseEntity<JwtResponse> refresh(@RequestBody RefreshRequest request) throws Exception {
+    public ResponseEntity<JwtResponse> refresh(@Valid @RequestBody RefreshRequest request) throws Exception {
         return ResponseEntity.ok(authService.refresh(request.getToken()));
     }
 }

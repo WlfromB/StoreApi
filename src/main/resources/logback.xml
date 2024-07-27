@@ -35,6 +35,10 @@
         <appender-ref ref="FILE" />
     </logger>
 
+    <logger name="com.example.demo" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
     <!-- Настройка уровня логирования и аппендеров -->
     <root level="INFO">
         <appender-ref ref="CONSOLE" />

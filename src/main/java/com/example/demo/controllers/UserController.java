@@ -14,12 +14,17 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @Slf4j
@@ -37,7 +42,13 @@ public class UserController {
     )
     @PostMapping
     public ResponseEntity<User> createUser(@Valid @RequestBody UserDto user) throws Exception {
-        return ResponseEntity.ok(userService.save(user));
+        User savedUser = userService.save(user);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedUser.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(savedUser);
     }
 
     @Operation(
@@ -73,7 +84,12 @@ public class UserController {
     @PostMapping("/{id}")
     public ResponseEntity<Author> createAuthor(@Valid @RequestBody AuthorDto author,
                                                @PathVariable long id) throws Exception {
-        return ResponseEntity.ok(authorService.saveAuthor(author, id));
+        Author savedAuthor = authorService.saveAuthor(author, id);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .buildAndExpand(savedAuthor.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(savedAuthor);
     }
 
     @Operation(
@@ -82,7 +98,7 @@ public class UserController {
     )
     @SecurityRequirement(name = "JWT")
     @PatchMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable long id,
+    public ResponseEntity<User> updateUser(@Valid @PathVariable @Min(1) long id,
                                            @RequestBody Role role) throws Exception {
         userService.changeRole(id, role);
         return ResponseEntity.ok().build();
@@ -94,7 +110,7 @@ public class UserController {
     )
     @SecurityRequirement(name = "JWT")
     @GetMapping("/email-or-login")
-    public ResponseEntity<User> getUserByEmailOrLogin(@RequestParam(name = "email_or_login") String emailOrLogin)
+    public ResponseEntity<User> getUserByEmailOrLogin(@Valid @RequestParam(name = "email-or-login") @NotBlank String emailOrLogin)
             throws Exception {
         return ResponseEntity.ok(userService.findByEmailOrLogin(emailOrLogin));
     }

@@ -27,4 +27,12 @@ public class AuthorDto {
         author.setDateOfBirthday(dateOfBirthday);
         return author;
     }
+    
+    public AuthorDto (){}
+    
+    public AuthorDto(Author author){
+        this.firstName = author.getFirstName();
+        this.lastName = author.getLastName();
+        this.dateOfBirthday = author.getDateOfBirthday();
+    }
 }

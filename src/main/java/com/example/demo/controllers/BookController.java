@@ -16,7 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -72,7 +74,13 @@ public class BookController {
     @SecurityRequirement(name = "JWT")
     @PostMapping
     public ResponseEntity<Book> createBook(@Valid @RequestBody BookDto book) {
-        return ResponseEntity.ok(bookService.saveBook(book));
+        Book savedBook = bookService.saveBook(book);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedBook.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(savedBook);
     }
 
     @Operation(
