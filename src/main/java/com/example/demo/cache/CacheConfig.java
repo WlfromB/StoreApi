@@ -9,8 +9,11 @@ import redis.clients.jedis.JedisPoolConfig;
 @Configuration
 public class CacheConfig {
     @Value("${uri.redis}")
-    private String host;
+    private String hostMethodsCache;
 
+    @Value("${uri.codes}")
+    private String hostActivationCodesCache;
+    
     @Bean
     public JedisPoolConfig jedisPoolConfig() {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
@@ -22,9 +25,14 @@ public class CacheConfig {
         return jedisPoolConfig;
     }
 
-    @Bean
-    public JedisPool jedisPool(JedisPoolConfig jedisPoolConfig) {
-        return new JedisPool(jedisPoolConfig, host);
+    @Bean(name = "cacheRedisPool")
+    public JedisPool cacheJedisPool(JedisPoolConfig jedisPoolConfig) {
+        return new JedisPool(jedisPoolConfig, hostMethodsCache);
+    }
+
+    @Bean(name = "verificationJedisPool")
+    public JedisPool verificationJedisPool(JedisPoolConfig jedisPoolConfig) {
+        return new JedisPool(jedisPoolConfig, hostActivationCodesCache);
     }
 
 }

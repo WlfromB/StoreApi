@@ -8,6 +8,8 @@ import com.example.demo.entities.User;
 import com.example.demo.security.PasswordProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,10 @@ public class UserServiceImpl implements UserService {
     private final PasswordProvider passwordProvider;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-
+    private final ApplicationContext applicationContext;
+    
+    private static final boolean ACTIVATED = true;
+    
     @Override
     @Transactional
     public Page<User> findAll(Pageable pageable) throws Exception {
@@ -72,5 +77,15 @@ public class UserServiceImpl implements UserService {
     public User findByEmailOrLogin(String emailOrLogin) throws Exception {
         return userRepository.findUserByEmailOrLogin(emailOrLogin, emailOrLogin)
                 .orElseThrow(() -> new NotFoundException("User not found"));
+    }
+
+    @Override
+    @Transactional
+    public boolean setActivatedMail(String email) throws Exception {
+        UserService userService = applicationContext.getBean(UserService.class);  
+        User user = userService.findByEmailOrLogin(email);
+        user.setEmailVerified(ACTIVATED);
+        userRepository.save(user);
+        return ACTIVATED;
     }
 }

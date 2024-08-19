@@ -1,6 +1,18 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                                      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd
+                                      http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
     <changeSet author="WlfromB (generated)" id="1720867568809-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="authors"/>
+            </not>
+        </preConditions>
         <createTable tableName="authors">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="authorsPK"/>
@@ -12,7 +24,13 @@
             <column name="lastname" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="authors_books"/>
+            </not>
+        </preConditions>
         <createTable tableName="authors_books">
             <column name="author_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="authors_booksPK"/>
@@ -22,7 +40,13 @@
             </column>
         </createTable>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-3">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="books"/>
+            </not>
+        </preConditions>
         <createTable tableName="books">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="booksPK"/>
@@ -36,7 +60,13 @@
             </column>
         </createTable>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-4">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="discounts"/>
+            </not>
+        </preConditions>
         <createTable tableName="discounts">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="discountsPK"/>
@@ -47,7 +77,13 @@
             <column name="book_id" type="BIGINT"/>
         </createTable>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-5">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="roles"/>
+            </not>
+        </preConditions>
         <createTable tableName="roles">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="rolesPK"/>
@@ -57,7 +93,13 @@
             </column>
         </createTable>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-6">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_roles"/>
+            </not>
+        </preConditions>
         <createTable tableName="user_roles">
             <column name="user_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="user_rolesPK"/>
@@ -67,7 +109,13 @@
             </column>
         </createTable>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-7">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
         <createTable tableName="users">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="usersPK"/>
@@ -84,37 +132,133 @@
             <column name="author_id" type="BIGINT"/>
         </createTable>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-8">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <uniqueConstraintExists tableName="books" constraintName="UC_BOOKSTITLE_COL"/>
+            </not>
+        </preConditions>
         <addUniqueConstraint columnNames="title" constraintName="UC_BOOKSTITLE_COL" tableName="books"/>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-9">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <uniqueConstraintExists tableName="roles" constraintName="UC_ROLESNAME_COL"/>
+            </not>
+        </preConditions>
         <addUniqueConstraint columnNames="name" constraintName="UC_ROLESNAME_COL" tableName="roles"/>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-10">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <uniqueConstraintExists tableName="users" constraintName="UC_USERSAUTHOR_ID_COL"/>
+            </not>
+        </preConditions>
         <addUniqueConstraint columnNames="author_id" constraintName="UC_USERSAUTHOR_ID_COL" tableName="users"/>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-11">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <uniqueConstraintExists tableName="users" constraintName="UC_USERSEMAIL_COL"/>
+            </not>
+        </preConditions>
         <addUniqueConstraint columnNames="email" constraintName="UC_USERSEMAIL_COL" tableName="users"/>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-12">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <uniqueConstraintExists tableName="users" constraintName="UC_USERSLOGIN_COL"/>
+            </not>
+        </preConditions>
         <addUniqueConstraint columnNames="login" constraintName="UC_USERSLOGIN_COL" tableName="users"/>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-13">
-        <addForeignKeyConstraint baseColumnNames="author_id" baseTableName="authors_books" constraintName="FK1qmg0jp4gtkls4bn52xhg4jnf" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="authors" validate="true"/>
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK1qmg0jp4gtkls4bn52xhg4jnf"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint
+                baseColumnNames="author_id"
+                baseTableName="authors_books"
+                constraintName="FK1qmg0jp4gtkls4bn52xhg4jnf"
+                referencedColumnNames="id"
+                referencedTableName="authors"/>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-14">
-        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_roles" constraintName="FKh8ciramu9cc9q3qcqiv4ue8a6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="roles" validate="true"/>
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FKauhxejt3khhw28cy7rh67rcsn"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint
+                baseColumnNames="book_id"
+                baseTableName="authors_books"
+                constraintName="FKauhxejt3khhw28cy7rh67rcsn"
+                referencedColumnNames="id"
+                referencedTableName="books"/>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-15">
-        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_roles" constraintName="FKhfh9dx7w3ubf1co1vdev94g3f" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FKk7n28x95psj5k56mkwqey1n28"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint
+                baseColumnNames="book_id"
+                baseTableName="discounts"
+                constraintName="FKk7n28x95psj5k56mkwqey1n28"
+                referencedColumnNames="id"
+                referencedTableName="books"/>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-16">
-        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="authors_books" constraintName="FKhljw0x9o8s80uce55w3iqhlqk" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="books" validate="true"/>
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FKn26ahqlonq4ey3j4d3r1qynf7"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint
+                baseColumnNames="author_id"
+                baseTableName="users"
+                constraintName="FKn26ahqlonq4ey3j4d3r1qynf7"
+                referencedColumnNames="id"
+                referencedTableName="authors"/>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-17">
-        <addForeignKeyConstraint baseColumnNames="author_id" baseTableName="users" constraintName="FKngn4hvglcrglrv2fibtmtto6g" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="authors" validate="true"/>
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FKocdqq2ogb7hfpowqre6cwev38"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint
+                baseColumnNames="role_id"
+                baseTableName="user_roles"
+                constraintName="FKocdqq2ogb7hfpowqre6cwev38"
+                referencedColumnNames="id"
+                referencedTableName="roles"/>
     </changeSet>
+
     <changeSet author="WlfromB (generated)" id="1720867568809-18">
-        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="discounts" constraintName="FKonpj4hkvlj5qq15gku3f1fkli" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="books" validate="true"/>
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FKs0ofkgjpmfwwokqbybx2d07v2"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint
+                baseColumnNames="user_id"
+                baseTableName="user_roles"
+                constraintName="FKs0ofkgjpmfwwokqbybx2d07v2"
+                referencedColumnNames="id"
+                referencedTableName="users"/>
     </changeSet>
 </databaseChangeLog>

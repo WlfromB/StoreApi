@@ -50,6 +50,9 @@ public class User {
     @JoinColumn(name = "author_id", nullable = true)
     private Author author;
 
+    @Column(nullable = false)
+    private boolean isEmailVerified = false;
+
     public User() {
     }
 }

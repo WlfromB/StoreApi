@@ -6,6 +6,13 @@
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="add-data-roles-1" author="WlfromB">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(*) FROM roles WHERE name='Author'
+                </sqlCheck>
+            </not>
+        </preConditions>
         <insert tableName="roles">
             <column name="name" value="Author"/>
         </insert>
@@ -17,6 +24,13 @@
     </changeSet>
 
     <changeSet id="add-data-roles-2" author="WlfromB">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(*) FROM roles WHERE name='Customer'
+                </sqlCheck>
+            </not>
+        </preConditions>
         <insert tableName="roles">
             <column name="name" value="Customer"/>
         </insert>
@@ -28,6 +42,13 @@
     </changeSet>
 
     <changeSet id="add-data-roles-3" author="WlfromB">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(*) FROM roles WHERE name='SuperUser'
+                </sqlCheck>
+            </not>
+        </preConditions>
         <insert tableName="roles">
             <column name="name" value="SuperUser"/>
         </insert>
@@ -39,6 +60,13 @@
     </changeSet>
 
     <changeSet id="add-data-roles-4" author="WlfromB">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(*) FROM roles WHERE name='Admin'
+                </sqlCheck>
+            </not>
+        </preConditions>
         <insert tableName="roles">
             <column name="name" value="Admin"/>
         </insert>
@@ -48,5 +76,6 @@
             </delete>
         </rollback>
     </changeSet>
+
 
 </databaseChangeLog>

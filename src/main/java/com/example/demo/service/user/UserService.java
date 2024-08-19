@@ -6,7 +6,6 @@ import com.example.demo.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
 
 public interface UserService {
     Page<User> findAll(Pageable pageable) throws Exception;
@@ -18,4 +17,6 @@ public interface UserService {
     void changeRole(long id, Role role) throws Exception;
     
     User findByEmailOrLogin(String emailOrEmail) throws Exception;
+
+    boolean setActivatedMail(String email) throws Exception;
 }
