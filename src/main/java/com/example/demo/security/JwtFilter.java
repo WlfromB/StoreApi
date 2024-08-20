@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtFilter extends GenericFilterBean {
     private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final List<String> EXCLUDE_URLS = List.of("/auth/login");
+    private static final List<String> EXCLUDE_URLS = List.of("/auth/login", "/mail/send-code");
     
     private final JwtProvider jwtProvider;
     

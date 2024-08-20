@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.service.activation_codes_cache.ActivationCodeCache;
 import com.example.demo.service.mail.MailSender;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class MailController {
     private final ActivationCodeCache cache;
 
     @PostMapping("/send-code")
-    public ResponseEntity<String> sendCode(@RequestParam("email") String email) throws NoSuchAlgorithmException {
+    public ResponseEntity<String> sendCode(@RequestParam("email") String email) throws NoSuchAlgorithmException, MessagingException {
         mailSender.sendCode(email);
         return ResponseEntity.ok("Successfully sent activation code");
     }

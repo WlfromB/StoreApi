@@ -7,11 +7,9 @@
 
     <changeSet id="add-data-roles-1" author="WlfromB">
         <preConditions onFail="MARK_RAN">
-            <not>
-                <sqlCheck expectedResult="0">
-                    SELECT COUNT(*) FROM roles WHERE name='Author'
-                </sqlCheck>
-            </not>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(id) FROM roles WHERE name='Author'
+            </sqlCheck>
         </preConditions>
         <insert tableName="roles">
             <column name="name" value="Author"/>
@@ -25,11 +23,9 @@
 
     <changeSet id="add-data-roles-2" author="WlfromB">
         <preConditions onFail="MARK_RAN">
-            <not>
-                <sqlCheck expectedResult="0">
-                    SELECT COUNT(*) FROM roles WHERE name='Customer'
-                </sqlCheck>
-            </not>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(id) FROM roles WHERE name='Customer'
+            </sqlCheck>
         </preConditions>
         <insert tableName="roles">
             <column name="name" value="Customer"/>
@@ -43,11 +39,9 @@
 
     <changeSet id="add-data-roles-3" author="WlfromB">
         <preConditions onFail="MARK_RAN">
-            <not>
-                <sqlCheck expectedResult="0">
-                    SELECT COUNT(*) FROM roles WHERE name='SuperUser'
-                </sqlCheck>
-            </not>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(id) FROM roles WHERE name='SuperUser'
+            </sqlCheck>
         </preConditions>
         <insert tableName="roles">
             <column name="name" value="SuperUser"/>
@@ -60,12 +54,10 @@
     </changeSet>
 
     <changeSet id="add-data-roles-4" author="WlfromB">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sqlCheck expectedResult="0">
-                    SELECT COUNT(*) FROM roles WHERE name='Admin'
-                </sqlCheck>
-            </not>
+        <preConditions onFail="MARK_RAN" >
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(id) FROM roles WHERE name='Admin'
+            </sqlCheck>
         </preConditions>
         <insert tableName="roles">
             <column name="name" value="Admin"/>

@@ -6,6 +6,7 @@ public interface ActivationCodeCache {
     static final String SUCCESS_SET = "Successfully set code";
     static final String SUCCESS_VERIFY = "Successfully verify";
     static final String ERROR_VERIFY = "Successfully verify";
+    static final Long TTL = 900L;
     
     String generateVerificationCode(String userLogin) throws NoSuchAlgorithmException;
 

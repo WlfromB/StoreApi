@@ -15,9 +15,12 @@ import java.util.Base64;
 @Service
 @Slf4j
 public class ActivationCodeCacheServiceImpl implements ActivationCodeCache{
+    private final JedisPool jedisPool;
+    
     @Autowired
-    @Qualifier("verificationJedisPool")
-    private JedisPool jedisPool;
+    public ActivationCodeCacheServiceImpl(@Qualifier("verificationJedisPool") JedisPool jedisPool) {
+        this.jedisPool = jedisPool;
+    }
     
     public String generateVerificationCode(String userEmail) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -28,7 +31,7 @@ public class ActivationCodeCacheServiceImpl implements ActivationCodeCache{
     public String setVerificationCode(String userLogin, String verificationCode) throws NoSuchAlgorithmException {
         Jedis jedis = jedisPool.getResource();
         String key = "login:%s".formatted(userLogin);
-        jedis.set(key.getBytes(StandardCharsets.UTF_8), verificationCode.getBytes(StandardCharsets.UTF_8));
+        jedis.setex(key.getBytes(StandardCharsets.UTF_8), TTL , verificationCode.getBytes(StandardCharsets.UTF_8));
         return SUCCESS_SET;
     }
 

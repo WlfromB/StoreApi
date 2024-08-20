@@ -12,13 +12,16 @@ import redis.clients.jedis.JedisPool;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
-public class CacheServiceImpl implements CacheService {
-    @Autowired
-    @Qualifier("cacheRedisPool")
-    private JedisPool jedisPool;
+public class CacheServiceImpl implements CacheService {        
+    private final JedisPool jedisPool;
     private final ObjectMapper objectMapper;
 
+    @Autowired
+    public CacheServiceImpl(ObjectMapper objectMapper, @Qualifier("cacheRedisPool") JedisPool jedisPool) {
+        this.objectMapper = objectMapper;
+        this.jedisPool = jedisPool;
+    }
+    
     @Override
     public <T> T getFromCache(String key, TypeReference<T> typeReference) throws Exception {
         try (Jedis jedis = jedisPool.getResource()) {
