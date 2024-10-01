@@ -1,5 +1,6 @@
 package com.example.demo.service.auth;
 
+import com.example.demo.constant.classes.JWTClaimName;
 import com.example.demo.security.JwtAuthentication;
 import io.jsonwebtoken.Claims;
 import lombok.AccessLevel;
@@ -16,12 +17,12 @@ public final class JwtUtils {
     public static JwtAuthentication generate(Claims claims) {
         final JwtAuthentication jwtAuthentication = new JwtAuthentication();
         jwtAuthentication.setRoles(getRoles(claims));
-        jwtAuthentication.setLogin(claims.get("login", String.class));
+        jwtAuthentication.setLogin(claims.get(JWTClaimName.SUB, String.class));
         return jwtAuthentication;
     }
 
     private static Set<String> getRoles(Claims claims) {
-        List<String> rolesList = claims.get("roles", List.class);
+        List<String> rolesList = claims.get(JWTClaimName.ROLES, List.class);
         return rolesList != null ? new HashSet<>(rolesList) : Collections.emptySet();
     }
 }

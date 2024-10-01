@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User save(UserDto user) throws Exception {
+    public User save(UserDto user) throws NotFoundException {
         User userEntity = user.from();
         userEntity.setPassword(passwordProvider.getPassword(user.getPassword()));
         if (userEntity.getRoles() == null) {
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void changeRole(long id, Role role) throws Exception {
+    public void changeRole(long id, Role role) throws NotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found"));
         user.getRoles().add(role);
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User findByEmailOrLogin(String emailOrLogin) throws Exception {
+    public User findByEmailOrLogin(String emailOrLogin) throws NotFoundException {
         return userRepository.findUserByEmailOrLogin(emailOrLogin, emailOrLogin)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }

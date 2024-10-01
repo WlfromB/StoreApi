@@ -30,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
             final String refreshToken = jwtProvider.generateRefreshToken(user);
             return new JwtResponse(accessToken, refreshToken);
         }
-        throw new AccessDeniedException("Invalid password");
+        throw new AccessDeniedException(INVALID_PASSWORD);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
             final String accessToken = jwtProvider.generateAccessToken(user);
             return new JwtResponse(accessToken, null);
         }
-        throw new AccessDeniedException("Invalid refresh token");
+        throw new AccessDeniedException(INVALID_REFRESH_TOKEN);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
             final String newRefreshToken = jwtProvider.generateRefreshToken(user);
             return new JwtResponse(accessToken, newRefreshToken);
         }
-        throw new AccessDeniedException("Invalid refresh token");
+        throw new AccessDeniedException(INVALID_REFRESH_TOKEN);
     }
 
     @Override

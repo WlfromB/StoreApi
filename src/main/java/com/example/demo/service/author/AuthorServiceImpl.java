@@ -1,6 +1,8 @@
 package com.example.demo.service.author;
 
 import com.example.demo.cache.PageDeserializer;
+import com.example.demo.constant.classes.NotFoundConstants;
+import com.example.demo.constant.classes.RolesConstants;
 import com.example.demo.dao.AuthorRepository;
 import com.example.demo.dao.BookRepository;
 import com.example.demo.dao.RoleRepository;
@@ -30,17 +32,16 @@ public class AuthorServiceImpl implements AuthorService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final CacheService cacheService;
-    private final int ttl = 600;
 
     @Override
     @Transactional
     public Author getAuthorById(long id) throws Exception {
-        String key = "author:%d".formatted(id);
+        String key = getKey(id);
         Author author = cacheService.getFromCache(key, new TypeReference<Author>() {
         });
         if (author == null) {
             author = authorRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("Author not found"));
+                    .orElseThrow(() -> new NotFoundException(NotFoundConstants.AUTHOR));
             cacheService.setToCache(key, author, ttl);
         }
         return author;
@@ -48,15 +49,14 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Page<Author> getAllAuthors(Pageable pageable) throws Exception {
-        String key = "authors:%d:%d"
-                .formatted(pageable.getPageNumber(), pageable.getPageSize());
+        String key = getKey(pageable);
         Page<Author> authors = cacheService
                 .getFromCache(key, new TypeReference<PageDeserializer<Author>>() {
                 });
         if (authors == null) {
             authors = authorRepository.findAll(pageable);
             if (authors.isEmpty()) {
-                throw new NotFoundException("Authors not found");
+                throw new NotFoundException(NotFoundConstants.setMany(NotFoundConstants.AUTHOR));
             }
             cacheService.setToCache(key, authors, ttl);
         }
@@ -65,31 +65,39 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public Author saveAuthor(AuthorDto author, long userId) throws Exception {
-        User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("User not found"));
+    public Author saveAuthor(AuthorDto author, long userId) throws NotFoundException, IllegalArgumentException {
+        User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException(NotFoundConstants.USER));
         Author authorEntity = authorRepository.save(author.from());
         if (user != null) {
             user.setAuthor(authorEntity);
-            Role role = roleRepository.findByName("Author")
-                    .orElseThrow(() -> new NotFoundException("Role not found"));
+            Role role = roleRepository.findByName(RolesConstants.AUTHOR)
+                    .orElseThrow(() -> new NotFoundException(NotFoundConstants.ROLE));
             user.getRoles().add(role);
             role.getUsers().add(user);
             roleRepository.save(role);
             userRepository.save(user);
             return authorEntity;
         }
-        throw new IllegalArgumentException("User not found");
+        throw new IllegalArgumentException(NotFoundConstants.USER);
     }
 
     @Override
     @Transactional
     public void addBook(BookDto book, long authorId) throws Exception {
-        log.info("enter addBook");
         Author author = getAuthorById(authorId);
         Book addedBook = bookRepository.findBookByTitle(book.getTitle())
                 .orElse(book.from());
         addedBook.getAuthors().add(author);
         author.getBooks().add(addedBook);
         authorRepository.save(author);
+    }
+
+    private String getKey(Long authorId) {
+        return "author:%d".formatted(authorId);
+    }
+
+    private String getKey(Pageable pageable) {
+        return "authors:%d:%d"
+                .formatted(pageable.getPageNumber(), pageable.getPageSize());
     }
 }

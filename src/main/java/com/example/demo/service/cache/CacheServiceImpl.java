@@ -1,5 +1,6 @@
 package com.example.demo.service.cache;
 
+import com.example.demo.constant.classes.CacheName;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class CacheServiceImpl implements CacheService {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public CacheServiceImpl(ObjectMapper objectMapper, @Qualifier("cacheRedisPool") JedisPool jedisPool) {
+    public CacheServiceImpl(ObjectMapper objectMapper, @Qualifier(CacheName.CACHE) JedisPool jedisPool) {
         this.objectMapper = objectMapper;
         this.jedisPool = jedisPool;
     }

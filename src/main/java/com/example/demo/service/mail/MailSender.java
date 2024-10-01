@@ -13,5 +13,5 @@ public interface MailSender {
 
     void sendSuccess(String to) throws Exception;
 
-    void sendCode(String to) throws NoSuchAlgorithmException, MessagingException;
+    void sendCode(String to) throws Exception;
 }

@@ -30,7 +30,7 @@ public class MailController {
 
 
     @PostMapping(SEND_CODE)
-    public ResponseEntity<String> sendCode(@RequestParam(EMAIL_PARAM) String email) throws NoSuchAlgorithmException, MessagingException {
+    public ResponseEntity<String> sendCode(@RequestParam(EMAIL_PARAM) String email) throws Exception {
         mailSender.sendCode(email);
         return ResponseEntity.ok(SUCCESS_SEND);
     }

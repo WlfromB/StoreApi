@@ -1,5 +1,6 @@
 package com.example.demo.service.mail;
 
+import com.example.demo.entities.User;
 import com.example.demo.service.activation_codes_cache.ActivationCodeCache;
 import com.example.demo.service.template.TemplateManager;
 import com.example.demo.service.user.UserService;
@@ -49,7 +50,8 @@ public class MailSenderImpl implements MailSender {
         javaMailSender.send(message);
     }
 
-    public void sendCode(String to) throws NoSuchAlgorithmException, MessagingException {
+    public void sendCode(String to) throws Exception {
+        userService.findByEmailOrLogin(to); // there throws exception if user doesn`t exist
         String content = cache.generateVerificationCode(to);
         cache.setVerificationCode(to, content);
         sendMail(to, ACTIVATION_CODE, generateContentCode(to, content));

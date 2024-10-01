@@ -1,5 +1,6 @@
 package com.example.demo.service.activation_codes_cache;
 
+import com.example.demo.constant.classes.CacheName;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,7 +19,7 @@ public class ActivationCodeCacheServiceImpl implements ActivationCodeCache{
     private final JedisPool jedisPool;
     
     @Autowired
-    public ActivationCodeCacheServiceImpl(@Qualifier("verificationJedisPool") JedisPool jedisPool) {
+    public ActivationCodeCacheServiceImpl(@Qualifier(CacheName.VERIFICATION) JedisPool jedisPool) {
         this.jedisPool = jedisPool;
     }
     
@@ -30,17 +31,21 @@ public class ActivationCodeCacheServiceImpl implements ActivationCodeCache{
     
     public String setVerificationCode(String userLogin, String verificationCode) throws NoSuchAlgorithmException {
         Jedis jedis = jedisPool.getResource();
-        String key = "login:%s".formatted(userLogin);
+        String key = getFormattedLoginKey(userLogin);
         jedis.setex(key.getBytes(StandardCharsets.UTF_8), TTL , verificationCode.getBytes(StandardCharsets.UTF_8));
         return SUCCESS_SET;
     }
 
     public String verify(String userLogin, String verificationCode) throws NoSuchAlgorithmException {
         Jedis jedis = jedisPool.getResource();
-        String key = "login:%s".formatted(userLogin);
+        String key = getFormattedLoginKey(userLogin);
         if (jedis.get(key.getBytes(StandardCharsets.UTF_8)).equals(verificationCode.getBytes(StandardCharsets.UTF_8))){
             return SUCCESS_VERIFY;
         }
         return ERROR_VERIFY;
+    }
+
+    private String getFormattedLoginKey(String userLogin) {
+        return "login:%s".formatted(userLogin);
     }
 }

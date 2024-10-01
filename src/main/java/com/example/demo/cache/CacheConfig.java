@@ -1,5 +1,6 @@
 package com.example.demo.cache;
 
+import com.example.demo.constant.classes.CacheName;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,12 +26,12 @@ public class CacheConfig {
         return jedisPoolConfig;
     }
 
-    @Bean(name = "cacheRedisPool")
+    @Bean(name = CacheName.CACHE)
     public JedisPool cacheJedisPool(JedisPoolConfig jedisPoolConfig) {
         return new JedisPool(jedisPoolConfig, hostMethodsCache);
     }
 
-    @Bean(name = "verificationJedisPool")
+    @Bean(name = CacheName.VERIFICATION)
     public JedisPool verificationJedisPool(JedisPoolConfig jedisPoolConfig) {
         return new JedisPool(jedisPoolConfig, hostActivationCodesCache);
     }

@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface BookService {
+    public static final int ttl = 600; // time in seconds
+
     Book getBookById(long id) throws Exception;
 
     Page<Book> getAllBooks(Pageable pageable) throws Exception;

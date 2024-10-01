@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface AuthorService {
+    public static final int ttl = 600;
+
     Author getAuthorById(long id) throws Exception;
 
     Page<Author> getAllAuthors(Pageable pageable) throws Exception;

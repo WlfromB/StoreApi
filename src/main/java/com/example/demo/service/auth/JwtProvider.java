@@ -1,5 +1,6 @@
 package com.example.demo.service.auth;
 
+import com.example.demo.constant.classes.JWTClaimName;
 import com.example.demo.entities.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -29,6 +30,17 @@ public class JwtProvider {
 
     @Value("${jwt.refresh-secret}")
     private String jwtRefreshSecretKey;
+
+    // exception types
+    private static final String EXPIRED = "Token expired ";
+    private static final String UNSUPPORTED = "Token not supported";
+    private static final String MALFORMED = "Malformed JWT";
+    private static final String INVALID_TOKEN = "Invalid JWT";
+    private static final String INVALID_SIGNATURE = "Invalid JWT signature";
+
+    private String setMessagePlace(String exceptionType){
+        return exceptionType + " {}";
+    }
     
     public String generateAccessToken(@NonNull User user) {
         final LocalDateTime date = LocalDateTime.now();
@@ -39,7 +51,7 @@ public class JwtProvider {
                 .setSubject(user.getLogin())
                 .setExpiration(accessExpiration)
                 .signWith(createKey(jwtAccessSecretKey), SignatureAlgorithm.HS256)
-                .claim("roles", formRoles(user))
+                .claim(JWTClaimName.ROLES, formRoles(user))
                 .compact();
     }
 
@@ -64,15 +76,15 @@ public class JwtProvider {
             return true;
         }
         catch (ExpiredJwtException expEx) {
-            log.error("Token expired {}", expEx.getMessage());
+            log.error(setMessagePlace(EXPIRED), expEx.getMessage());
         } catch (UnsupportedJwtException unsEx) {
-            log.error("Unsupported jwt {}", unsEx.getMessage());
+            log.error(setMessagePlace(UNSUPPORTED), unsEx.getMessage());
         } catch (MalformedJwtException mjEx) {  
-            log.error("Malformed jwt {}", mjEx.getMessage());
+            log.error(setMessagePlace(MALFORMED), mjEx.getMessage());
         } catch (SignatureException sEx) {
-            log.error("Invalid signature {}", sEx.getMessage());
+            log.error(setMessagePlace(INVALID_SIGNATURE), sEx.getMessage());
         } catch (Exception e) {
-            log.error("invalid token {}", e.getMessage());
+            log.error(setMessagePlace(INVALID_TOKEN), e.getMessage());
         }
         return false;        
     }

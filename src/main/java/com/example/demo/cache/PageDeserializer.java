@@ -11,11 +11,16 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true, value = {"pageable"})
 public class PageDeserializer<T> extends PageImpl<T> {
+    private static final String CONTENT_PARAM = "content";
+    private static final String PAGE_PARAM = "number";
+    private static final String PAGE_SIZE_PARAM = "size";
+    private static final String PAGE_TOTAL_ELEMENTS_PARAM = "totalElements";
+
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public PageDeserializer(@JsonProperty("content") List<T> content,
-                            @JsonProperty("number") int page,
-                            @JsonProperty("size") int size,
-                            @JsonProperty("totalElements") long total
+    public PageDeserializer(@JsonProperty(CONTENT_PARAM) List<T> content,
+                            @JsonProperty(PAGE_PARAM) int page,
+                            @JsonProperty(PAGE_SIZE_PARAM) int size,
+                            @JsonProperty(PAGE_TOTAL_ELEMENTS_PARAM) long total
     ) {
         super(content, PageRequest.of(page, size), total);
     }
