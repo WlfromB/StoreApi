@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.constant.classes.URIStartWith;
 import com.example.demo.requests.JwtRequest;
 import com.example.demo.requests.RefreshRequest;
 import com.example.demo.responses.JwtResponse;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping(URIStartWith.AUTH)
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Методы работы с авторизацией")
@@ -28,7 +29,7 @@ public class AuthController {
             summary = "Авторизация пользователя",
             description = "Позволяет получить access и refresh jwts"
     )
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@Valid @RequestBody JwtRequest request) throws Exception {
         return ResponseEntity.ok(authService.login(request));
     }
@@ -37,7 +38,7 @@ public class AuthController {
             summary = "Получение access токена",
             description = "Позволяет обновить access токен, в случае валидного и not exprired refresh токена"
     )
-    @PostMapping("access")
+    @PostMapping("/access")
     public ResponseEntity<JwtResponse> access(@Valid @RequestBody RefreshRequest request) throws Exception {
         return ResponseEntity.ok(authService.getAccessToken(request.getToken()));
     }
@@ -46,7 +47,7 @@ public class AuthController {
             summary = "Получение refresh токена",
             description = "Позволяет обновить refresh токен, в случае валидного и not exprired refresh токена"
     )
-    @PostMapping("refresh")
+    @PostMapping("/refresh")
     public ResponseEntity<JwtResponse> refresh(@Valid @RequestBody RefreshRequest request) throws Exception {
         return ResponseEntity.ok(authService.refresh(request.getToken()));
     }

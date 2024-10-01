@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.constant.classes.URIStartWith;
 import com.example.demo.service.activation_codes_cache.ActivationCodeCache;
 import com.example.demo.service.mail.MailSender;
 import jakarta.mail.MessagingException;
@@ -12,7 +13,7 @@ import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/mail")
+@RequestMapping(URIStartWith.MAIL)
 public class MailController {
     private final MailSender mailSender;
     private final ActivationCodeCache cache;

@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.constant.classes.URIStartWith;
 import com.example.demo.dto.DiscountDto;
 import com.example.demo.entities.Discount;
 import com.example.demo.pagination.PageableCreator;
@@ -22,7 +23,7 @@ import java.net.URI;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/discount")
+@RequestMapping(URIStartWith.DISCOUNT)
 @Slf4j
 @RequiredArgsConstructor
 @Tag(name = "Методы работы со скидками")

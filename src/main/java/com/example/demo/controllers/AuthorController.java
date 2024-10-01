@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.constant.classes.URIStartWith;
 import com.example.demo.dto.BookDto;
 import com.example.demo.entities.Author;
 import com.example.demo.pagination.PageableCreator;
@@ -18,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/author")
+@RequestMapping(URIStartWith.AUTHOR)
 @Slf4j
 @RequiredArgsConstructor
 @Tag(name = "Методы работы с авторами")

@@ -1,6 +1,9 @@
 package com.example.demo.security;
 
+import com.example.demo.constant.classes.RolesConstants;
+import com.example.demo.constant.classes.URIStartWith;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,6 +22,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtFilter jwtFilter;
+
+    @Value("${springdoc.api-docs.path}")
+    private String V3_DOCS_PATH;
+
+    @Value("${springdoc.swagger-ui.path}")
+    private String SWAGGER_UI_PATH;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,14 +49,21 @@ public class SecurityConfig {
                         }
                 ))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/**", "/mail/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/user").permitAll()
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/discount").hasAnyAuthority("Author", "Admin")
-                        .requestMatchers(HttpMethod.POST, "/book").hasAnyAuthority("Admin", "Author")
-                        .requestMatchers(HttpMethod.PATCH, "/book/**").hasAnyAuthority("Admin", "Author")
-                        .requestMatchers(HttpMethod.PATCH, "/user/**").hasAuthority("Admin")
-                        .requestMatchers(HttpMethod.PATCH, "/author/{id}").hasAnyAuthority("Admin", "Author")
+                        .requestMatchers(URIStartWith.getAllAuthorities(URIStartWith.AUTH),
+                                URIStartWith.getAllAuthorities(URIStartWith.MAIL)).permitAll()
+                        .requestMatchers(HttpMethod.POST, URIStartWith.USER).permitAll()
+                        .requestMatchers(URIStartWith.getAllAuthorities(V3_DOCS_PATH),
+                                URIStartWith.getAllAuthorities(SWAGGER_UI_PATH)).permitAll()
+                        .requestMatchers(HttpMethod.POST, URIStartWith.DISCOUNT)
+                        .hasAnyAuthority(RolesConstants.AUTHOR, RolesConstants.ADMIN)
+                        .requestMatchers(HttpMethod.POST, URIStartWith.BOOK)
+                        .hasAnyAuthority(RolesConstants.AUTHOR, RolesConstants.ADMIN)
+                        .requestMatchers(HttpMethod.PATCH, URIStartWith.getAllAuthorities(URIStartWith.BOOK))
+                        .hasAnyAuthority(RolesConstants.AUTHOR, RolesConstants.ADMIN)
+                        .requestMatchers(HttpMethod.PATCH, URIStartWith.getAllAuthorities(URIStartWith.USER))
+                        .hasAuthority(RolesConstants.ADMIN)
+                        .requestMatchers(HttpMethod.PATCH, URIStartWith.getAddedIdParam(URIStartWith.AUTHOR))
+                        .hasAnyAuthority(RolesConstants.AUTHOR, RolesConstants.ADMIN)
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

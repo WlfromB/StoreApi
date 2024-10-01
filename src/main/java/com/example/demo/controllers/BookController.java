@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.constant.classes.URIStartWith;
 import com.example.demo.dto.BookDto;
 import com.example.demo.entities.Book;
 import com.example.demo.pagination.PageableCreator;
@@ -23,7 +24,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("/book")
+@RequestMapping(URIStartWith.BOOK)
 @RequiredArgsConstructor
 @Tag(name = "Методы работы с книгами")
 public class BookController {

@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.constant.classes.URIStartWith;
 import com.example.demo.dto.AuthorDto;
 import com.example.demo.dto.UserDto;
 import com.example.demo.entities.Author;
@@ -28,7 +29,7 @@ import java.net.URI;
 
 @RestController
 @Slf4j
-@RequestMapping("/user")
+@RequestMapping(URIStartWith.USER)
 @RequiredArgsConstructor
 @Tag(name = "Методы работы с пользователями")
 public class UserController {
