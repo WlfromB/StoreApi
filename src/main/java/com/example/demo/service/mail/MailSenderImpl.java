@@ -34,7 +34,7 @@ public class MailSenderImpl implements MailSender {
     @Value("${application.host}")
     private String host;
 
-    @Value("${server.port}")
+    @Value("${application.port}")
     private String port;
 
     public void sendMail(String to, String subject, String content) throws MessagingException {

@@ -22,21 +22,27 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        String all = "*";
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
                             CorsConfiguration corsConfiguration = new CorsConfiguration();
-                            corsConfiguration.setAllowedOriginPatterns(List.of("*"));
-                            corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                            corsConfiguration.setAllowedOriginPatterns(List.of(all));
+                            corsConfiguration.setAllowedMethods(
+                                    List.of(HttpMethod.GET.name(),
+                                            HttpMethod.POST.name(),
+                                            HttpMethod.PUT.name(),
+                                            HttpMethod.DELETE.name(),
+                                            HttpMethod.OPTIONS.name()));
                             corsConfiguration.setAllowCredentials(true);
-                            corsConfiguration.addAllowedHeader("*");
+                            corsConfiguration.addAllowedHeader(all);
                             return corsConfiguration;
                         }
                 ))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/auth/**", "/mail/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user").permitAll()
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/discount").hasAnyAuthority("Author", "Admin")
                         .requestMatchers(HttpMethod.POST, "/book").hasAnyAuthority("Admin", "Author")
                         .requestMatchers(HttpMethod.PATCH, "/book/**").hasAnyAuthority("Admin", "Author")
