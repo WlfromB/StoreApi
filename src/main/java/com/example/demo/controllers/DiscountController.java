@@ -31,6 +31,12 @@ public class DiscountController {
     private final DiscountService discountService;
     private final PageableCreator pageableCreator;
 
+    private static final String ALL = "/discounts";
+    private static final String BY_ID = "/{id}";
+    private static final String BY_AUTHOR="/author";
+    private static final String BY_BOOK="/book";
+    private static final String BY_DATE="/date";
+
     @Operation(
             summary = "Получения пользователя по email/login",
             description = "Позволяет получить пользователя по email/login"
@@ -41,7 +47,7 @@ public class DiscountController {
         Discount discount = discountService.saveDiscount(discountDto);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{id}")
+                .path(BY_ID)
                 .buildAndExpand(discount.getId())
                 .toUri();                
         return ResponseEntity.created(uri).body(discount);
@@ -52,7 +58,7 @@ public class DiscountController {
             description = "Позволяет получить скидки по id автора"
     )
     @SecurityRequirement(name = "JWT")
-    @GetMapping("/author")
+    @GetMapping(BY_AUTHOR)
     public ResponseEntity<Page<Discount>> getDiscountByAuthorId(
             @RequestParam Long id,
             @ModelAttribute @Parameter(description = "Параметры страницы. " +
@@ -67,7 +73,7 @@ public class DiscountController {
             description = "Позволяет получить скидки по дате"
     )
     @SecurityRequirement(name = "JWT")
-    @GetMapping("/date")
+    @GetMapping(BY_DATE)
     public ResponseEntity<Page<Discount>> getDiscountByDate(
             @RequestParam @Parameter(description = "Дата в формате \"yyyy-mm-dd\"",
                     example = "2024-07-18") LocalDate date,
@@ -100,7 +106,7 @@ public class DiscountController {
             description = "Позволяет получить скидки по id книги"
     )
     @SecurityRequirement(name = "JWT")
-    @GetMapping("/book")
+    @GetMapping(BY_BOOK)
     public ResponseEntity<Page<Discount>> getDiscountByBook(
             @RequestParam Long bookId,
             @ModelAttribute @Parameter(description = "Параметры страницы. " +
@@ -115,7 +121,7 @@ public class DiscountController {
             description = "Позволяет получить скидки (страницу)"
     )
     @SecurityRequirement(name = "JWT")
-    @GetMapping("/discounts")
+    @GetMapping(ALL)
     public ResponseEntity<Page<Discount>> getAllDiscounts(
             @ModelAttribute @Parameter(description = "Параметры страницы. " +
                     "Параметры являются необязательными." +

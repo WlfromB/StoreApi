@@ -27,6 +27,9 @@ public class AuthorController {
     private final AuthorService authorService;
     private final PageableCreator pageableCreator;
 
+    private static final String ALL = "/authors";
+    private static final String BY_ID = "/{id}";
+
     @Operation(
             summary = "Получение автора",
             description = "Позволяет получить автора"
@@ -42,7 +45,7 @@ public class AuthorController {
             description = "Позволяет получить авторов(страница)"
     )
     @SecurityRequirement(name = "JWT")
-    @GetMapping("/authors")
+    @GetMapping(ALL)
     public ResponseEntity<Page<Author>> getAuthors(
             @ModelAttribute @Parameter(description = "Параметры страницы. " +
                     "Параметры являются необязательными." +
@@ -56,7 +59,7 @@ public class AuthorController {
             description = "Позволяет добавить книгу автору по id"
     )
     @SecurityRequirement(name = "JWT")
-    @PatchMapping("/{id}")
+    @PatchMapping(BY_ID)
     public ResponseEntity<String> updateAuthor(
             @Valid @RequestBody BookDto book,
             @PathVariable(name = "id") long id) throws Exception {

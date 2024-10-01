@@ -31,12 +31,16 @@ public class BookController {
     private final BookService bookService;
     private final PageableCreator pageableCreator;
 
+    private static final String ALL = "/books";
+    private static final String BY_ID = "/{id}";
+    private static final String AUTHORS = "/authors";
+
     @Operation(
             summary = "Получение книг",
             description = "Позволяет получить книги (страницу)"
     )
     @SecurityRequirement(name = "JWT")
-    @GetMapping("/books")
+    @GetMapping(ALL)
     public ResponseEntity<Page<Book>> getAllBooks(
             @ModelAttribute PaginationParams paginationParams) throws Exception {
         Pageable pageable = pageableCreator.create(paginationParams);
@@ -58,7 +62,7 @@ public class BookController {
             description = "Позволяет получить книги по id авторов"
     )
     @SecurityRequirement(name = "JWT")
-    @GetMapping("/authors")
+    @GetMapping(AUTHORS)
     public ResponseEntity<Page<Book>> getBooksByAuthors(
             @RequestParam List<Long> authorId,
             @ModelAttribute @Parameter(description = "Параметры страницы. " +
@@ -78,7 +82,7 @@ public class BookController {
         Book savedBook = bookService.saveBook(book);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{id}")
+                .path(BY_ID)
                 .buildAndExpand(savedBook.getId())
                 .toUri();
         return ResponseEntity.created(location).body(savedBook);
@@ -89,7 +93,7 @@ public class BookController {
             description = "Позволяет добавить книге по её id список авторов"
     )
     @SecurityRequirement(name = "JWT")
-    @PatchMapping("/{id}/authors")
+    @PatchMapping(BY_ID + AUTHORS)
     public ResponseEntity<Book> updateBook(@RequestBody List<Long> authorIds,
                                            @PathVariable long id) throws Exception {
         return ResponseEntity.ok(bookService.setAuthors(id, authorIds));

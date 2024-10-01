@@ -37,6 +37,12 @@ public class UserController {
     private final AuthorService authorService;
     private final PageableCreator pageableCreator;
 
+    private static final String BY_ID= "/{id}";
+    private static final String ALL = "/users";
+    private static final String BY_EMAIL_OR_LOGIN = "/email-or-login";
+
+    private static final String EMAIL_OR_LOGIN_PARAM = "email-or-login";
+
     @Operation(
             summary = "Создание пользователя",
             description = "Позволяет зарегистрировать пользователя"
@@ -46,7 +52,7 @@ public class UserController {
         User savedUser = userService.save(user);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{id}")
+                .path(BY_ID)
                 .buildAndExpand(savedUser.getId())
                 .toUri();
         return ResponseEntity.created(location).body(savedUser);
@@ -57,7 +63,7 @@ public class UserController {
             description = "Позволяет страницу пользователей"
     )
     @SecurityRequirement(name = "JWT")
-    @GetMapping("/users")
+    @GetMapping(ALL)
     public ResponseEntity<Page<User>> getAllUsers(
             @ModelAttribute @Parameter(description = "Параметры страницы. " +
                     "Параметры являются необязательными." +
@@ -82,7 +88,7 @@ public class UserController {
             description = "Позволяет зарегистрировать автора по id пользователя"
     )
     @SecurityRequirement(name = "JWT")
-    @PostMapping("/{id}")
+    @PostMapping(BY_ID)
     public ResponseEntity<Author> createAuthor(@Valid @RequestBody AuthorDto author,
                                                @PathVariable long id) throws Exception {
         Author savedAuthor = authorService.saveAuthor(author, id);
@@ -98,7 +104,7 @@ public class UserController {
             description = "Позволяет изменить роль пользователя"
     )
     @SecurityRequirement(name = "JWT")
-    @PatchMapping("/{id}")
+    @PatchMapping(BY_ID)
     public ResponseEntity<User> updateUser(@Valid @PathVariable @Min(1) long id,
                                            @RequestBody Role role) throws Exception {
         userService.changeRole(id, role);
@@ -110,8 +116,8 @@ public class UserController {
             description = "Позволяет получить пользователя по email/login"
     )
     @SecurityRequirement(name = "JWT")
-    @GetMapping("/email-or-login")
-    public ResponseEntity<User> getUserByEmailOrLogin(@Valid @RequestParam(name = "email-or-login") @NotBlank String emailOrLogin)
+    @GetMapping(BY_EMAIL_OR_LOGIN)
+    public ResponseEntity<User> getUserByEmailOrLogin(@Valid @RequestParam(name = EMAIL_OR_LOGIN_PARAM) @NotBlank String emailOrLogin)
             throws Exception {
         return ResponseEntity.ok(userService.findByEmailOrLogin(emailOrLogin));
     }

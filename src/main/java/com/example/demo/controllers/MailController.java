@@ -18,21 +18,32 @@ public class MailController {
     private final MailSender mailSender;
     private final ActivationCodeCache cache;
 
-    @PostMapping("/send-code")
-    public ResponseEntity<String> sendCode(@RequestParam("email") String email) throws NoSuchAlgorithmException, MessagingException {
+    // URIs
+    private static final String SEND_CODE = "/send-code";
+    private static final String VERIFY = "/verify";
+    // Params
+    private static final String EMAIL_PARAM = "email";
+    private static final String CODE_PARAM = "code";
+    // Answers
+    private static final String SUCCESS_SEND = "Successfully sent activation code";
+    private static final String WRONG_CODE = "Invalid activation code";
+
+
+    @PostMapping(SEND_CODE)
+    public ResponseEntity<String> sendCode(@RequestParam(EMAIL_PARAM) String email) throws NoSuchAlgorithmException, MessagingException {
         mailSender.sendCode(email);
-        return ResponseEntity.ok("Successfully sent activation code");
+        return ResponseEntity.ok(SUCCESS_SEND);
     }
 
-    @GetMapping("/verify")
+    @GetMapping(VERIFY)
     public ResponseEntity<String> verify(
-            @RequestParam("email") String email,
-            @RequestParam("code") String code) throws Exception {
+            @RequestParam(EMAIL_PARAM) String email,
+            @RequestParam(CODE_PARAM) String code) throws Exception {
         String result = cache.verify(email, code);
         if (Objects.equals(result, ActivationCodeCache.SUCCESS_VERIFY)) {
             mailSender.sendSuccess(email);
             return ResponseEntity.ok(result);
         }
-        throw new IllegalArgumentException("Invalid activation code");
+        throw new IllegalArgumentException(WRONG_CODE);
     }
 }
