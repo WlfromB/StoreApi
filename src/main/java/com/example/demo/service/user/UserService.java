@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 
 
 public interface UserService {
+    Boolean ACTIVATED = true;
+
     Page<User> findAll(Pageable pageable) throws Exception;
 
     User findById(long id) throws Exception;

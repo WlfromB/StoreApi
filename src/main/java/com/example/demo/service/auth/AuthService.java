@@ -5,8 +5,8 @@ import com.example.demo.responses.JwtResponse;
 import com.example.demo.security.JwtAuthentication;
 
 public interface AuthService {
-    public static final String INVALID_PASSWORD = "Invalid password";
-    public static final String INVALID_REFRESH_TOKEN = "Invalid refresh token";
+    String INVALID_PASSWORD = "Invalid password";
+    String INVALID_REFRESH_TOKEN = "Invalid refresh token";
 
     JwtResponse login(JwtRequest request) throws Exception;
 

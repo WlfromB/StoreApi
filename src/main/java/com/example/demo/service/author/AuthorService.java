@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface AuthorService {
-    public static final int ttl = 600;
+    int ttl = 600;
 
     Author getAuthorById(long id) throws Exception;
 
@@ -17,4 +17,13 @@ public interface AuthorService {
     Author saveAuthor(AuthorDto author, long userId) throws Exception;
 
     void addBook(BookDto book, long authorId) throws Exception;
+
+    default String getKey(Long authorId) {
+        return "author:%d".formatted(authorId);
+    }
+
+    default String getKey(Pageable pageable) {
+        return "authors:%d:%d"
+                .formatted(pageable.getPageNumber(), pageable.getPageSize());
+    }
 }

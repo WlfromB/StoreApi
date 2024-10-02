@@ -1,5 +1,7 @@
 package com.example.demo.service.user;
 
+import com.example.demo.constant.classes.NotFoundConstants;
+import com.example.demo.constant.classes.RolesConstants;
 import com.example.demo.dao.RoleRepository;
 import com.example.demo.dao.UserRepository;
 import com.example.demo.dto.UserDto;
@@ -27,16 +29,13 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final ApplicationContext applicationContext;
     
-    private static final boolean ACTIVATED = true;
-    
     @Override
     @Transactional
     public Page<User> findAll(Pageable pageable) throws Exception {
         Page<User> users = userRepository.findAll(pageable);
         if (users.isEmpty()) {
-            throw new NotFoundException("Users not found");
+            throw new NotFoundException(NotFoundConstants.setMany(NotFoundConstants.USER));
         }
-        log.info("Users found {}", users);
         return users;
     }
 
@@ -44,7 +43,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User findById(long id) throws Exception {
         return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> new NotFoundException(NotFoundConstants.USER));
     }
 
     @Override
@@ -53,8 +52,8 @@ public class UserServiceImpl implements UserService {
         User userEntity = user.from();
         userEntity.setPassword(passwordProvider.getPassword(user.getPassword()));
         if (userEntity.getRoles() == null) {
-            Role role = roleRepository.findByName("Customer")
-                    .orElseThrow(() -> new NotFoundException("Role not found"));
+            Role role = roleRepository.findByName(RolesConstants.CUSTOMER)
+                    .orElseThrow(() -> new NotFoundException(NotFoundConstants.ROLE));
             HashSet<Role> roles = new HashSet<>();
             roles.add(role);
             userEntity.setRoles(roles);
@@ -67,7 +66,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void changeRole(long id, Role role) throws NotFoundException {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> new NotFoundException(NotFoundConstants.USER));
         user.getRoles().add(role);
         userRepository.save(user);
     }
@@ -76,7 +75,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User findByEmailOrLogin(String emailOrLogin) throws NotFoundException {
         return userRepository.findUserByEmailOrLogin(emailOrLogin, emailOrLogin)
-                .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> new NotFoundException(NotFoundConstants.USER));
     }
 
     @Override

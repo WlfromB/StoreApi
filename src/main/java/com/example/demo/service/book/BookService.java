@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface BookService {
-    public static final int ttl = 600; // time in seconds
+    int ttl = 600; // time in seconds
 
     Book getBookById(long id) throws Exception;
 
@@ -19,4 +19,16 @@ public interface BookService {
     Page<Book> getBooksByAuthors(List<Long> authorIds, Pageable pageable) throws Exception;
 
     Book setAuthors(Long bookId, List<Long> authorIds) throws Exception;
+
+    default String getKey(Long id) {
+        return "book:%d".formatted(id);
+    }
+
+    default String getKey(Pageable pageable) {
+        return "all-books:%d:%d".formatted(pageable.getPageNumber(), pageable.getPageSize());
+    }
+
+    default String getKey(List<Long> authorIds) {
+        return "book-by-authors:%s".formatted(authorIds.toString());
+    }
 }

@@ -92,12 +92,5 @@ public class AuthorServiceImpl implements AuthorService {
         authorRepository.save(author);
     }
 
-    private String getKey(Long authorId) {
-        return "author:%d".formatted(authorId);
-    }
 
-    private String getKey(Pageable pageable) {
-        return "authors:%d:%d"
-                .formatted(pageable.getPageNumber(), pageable.getPageSize());
-    }
 }

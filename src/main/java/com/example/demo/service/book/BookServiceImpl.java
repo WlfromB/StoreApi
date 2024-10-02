@@ -97,15 +97,4 @@ public class BookServiceImpl implements BookService {
         return book;
     }
 
-    private String getKey(Long id) {
-        return "book:%d".formatted(id);
-    }
-
-    private String getKey(Pageable pageable) {
-        return "all-books:%d:%d".formatted(pageable.getPageNumber(), pageable.getPageSize());
-    }
-
-    private String getKey(List<Long> authorIds) {
-        return "book-by-authors:%s".formatted(authorIds.toString());
-    }
 }
