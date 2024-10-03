@@ -7,10 +7,12 @@ import com.example.demo.dto.BookDto;
 import com.example.demo.entities.Author;
 import com.example.demo.entities.Book;
 import com.example.demo.service.author.AuthorService;
+import com.example.demo.service.author_book.AuthorBookService;
 import com.example.demo.service.cache.CacheService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
-    private final AuthorService authorService;
     private final CacheService cacheService;
 
     @Override
@@ -70,31 +71,20 @@ public class BookServiceImpl implements BookService {
     public Page<Book> getBooksByAuthors(List<Long> authorIds, Pageable pageable) throws Exception {
         String key = getKey(authorIds);
         PageDeserializer<Book> books = cacheService
-                .getFromCache(key, new TypeReference<PageDeserializer<Book>>() {
-                });
+                .getFromCache(key, new TypeReference<PageDeserializer<Book>>() { });
         if (books == null) {
             books = new PageDeserializer<>(bookRepository.findBookByAuthors(authorIds, pageable));
             if (books.isEmpty()) {
                 throw new NotFoundException(NotFoundConstants.setMany(NotFoundConstants.BOOK));
             }
             cacheService.setToCache(key, books, ttl);
-        } else {
         }
         return books;
     }
 
     @Override
-    @Transactional
-    public Book setAuthors(Long bookId, List<Long> authorIds) throws Exception {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new NotFoundException(NotFoundConstants.BOOK));
-        for (Long authorId : authorIds) {
-            Author author = authorService.getAuthorById(authorId);
-            book.getAuthors().add(author);
-            author.getBooks().add(book);
-        }
-        bookRepository.save(book);
-        return book;
+    public Book getByTitle(String title) throws NotFoundException {
+        return bookRepository.findBookByTitle(title).orElseThrow(()-> new NotFoundException(NotFoundConstants.BOOK));
     }
 
 }

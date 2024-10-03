@@ -13,4 +13,8 @@ public interface ActivationCodeCache {
     String setVerificationCode(String userLogin, String verificationCode) throws NoSuchAlgorithmException;
 
     String verify(String userLogin, String verificationCode) throws NoSuchAlgorithmException;
+
+    default String getFormattedLoginKey(String userLogin) {
+        return "login:%s".formatted(userLogin);
+    }
 }

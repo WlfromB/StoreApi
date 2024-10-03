@@ -9,12 +9,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "roles")
-@NoArgsConstructor
 @EqualsAndHashCode(exclude = "users")
 @Schema(description = "Сущность роли")
 public class Role {
@@ -29,7 +29,11 @@ public class Role {
     @ToString.Exclude
     @JsonIgnoreProperties("roles")
     private Set<User> users;
-    
+
+    public Role(){
+        this.users = new HashSet<>();
+    }
+
     public Role(String name) {
         this.name = name;
     }

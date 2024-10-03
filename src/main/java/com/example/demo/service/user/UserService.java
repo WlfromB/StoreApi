@@ -5,6 +5,7 @@ import com.example.demo.entities.Role;
 import com.example.demo.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.webjars.NotFoundException;
 
 
 public interface UserService {
@@ -12,11 +13,11 @@ public interface UserService {
 
     Page<User> findAll(Pageable pageable) throws Exception;
 
-    User findById(long id) throws Exception;
+    User findById(long id) throws NotFoundException;
 
     User save(UserDto user) throws Exception;
 
-    void changeRole(long id, Role role) throws Exception;
+    void changeRole(long id, Role role) throws NotFoundException;
     
     User findByEmailOrLogin(String emailOrEmail) throws Exception;
 

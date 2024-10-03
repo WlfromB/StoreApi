@@ -5,6 +5,7 @@ import com.example.demo.dto.BookDto;
 import com.example.demo.entities.Book;
 import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
+import com.example.demo.service.author_book.AuthorBookService;
 import com.example.demo.service.book.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,6 +31,7 @@ import java.util.List;
 public class BookController {
     private final BookService bookService;
     private final PageableCreator pageableCreator;
+    private final AuthorBookService authorBookService;
 
     private static final String ALL = "/books";
     private static final String BY_ID = "/{id}";
@@ -96,6 +98,6 @@ public class BookController {
     @PatchMapping(BY_ID + AUTHORS)
     public ResponseEntity<Book> updateBook(@RequestBody List<Long> authorIds,
                                            @PathVariable long id) throws Exception {
-        return ResponseEntity.ok(bookService.setAuthors(id, authorIds));
+        return ResponseEntity.ok(authorBookService.addAuthorToBook(id, authorIds));
     }
 }

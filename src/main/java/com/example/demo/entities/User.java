@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -54,5 +55,6 @@ public class User {
     private boolean isEmailVerified = false;
 
     public User() {
+        this.roles = new HashSet<>();
     }
 }

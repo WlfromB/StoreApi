@@ -4,6 +4,7 @@ import com.example.demo.dto.BookDto;
 import com.example.demo.entities.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.webjars.NotFoundException;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface BookService {
 
     Page<Book> getBooksByAuthors(List<Long> authorIds, Pageable pageable) throws Exception;
 
-    Book setAuthors(Long bookId, List<Long> authorIds) throws Exception;
+    Book getByTitle(String title) throws NotFoundException;
 
     default String getKey(Long id) {
         return "book:%d".formatted(id);

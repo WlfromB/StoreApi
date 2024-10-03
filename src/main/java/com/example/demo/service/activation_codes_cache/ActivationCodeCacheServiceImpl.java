@@ -44,8 +44,4 @@ public class ActivationCodeCacheServiceImpl implements ActivationCodeCache{
         }
         return ERROR_VERIFY;
     }
-
-    private String getFormattedLoginKey(String userLogin) {
-        return "login:%s".formatted(userLogin);
-    }
 }

@@ -6,6 +6,7 @@ import com.example.demo.entities.Author;
 import com.example.demo.pagination.PageableCreator;
 import com.example.demo.pagination.PaginationParams;
 import com.example.demo.service.author.AuthorService;
+import com.example.demo.service.author_book.AuthorBookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthorController {
     private final AuthorService authorService;
     private final PageableCreator pageableCreator;
+    private final AuthorBookService authorBookService;
 
     private static final String ALL = "/authors";
     private static final String BY_ID = "/{id}";
@@ -63,7 +65,7 @@ public class AuthorController {
     public ResponseEntity<String> updateAuthor(
             @Valid @RequestBody BookDto book,
             @PathVariable(name = "id") long id) throws Exception {
-        authorService.addBook(book, id);
-        return ResponseEntity.ok("successfully updated author");
+        authorBookService.addBookToAuthor(book, id);
+        return ResponseEntity.ok("Successfully updated author");
     }
 }

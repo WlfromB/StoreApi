@@ -8,6 +8,7 @@ import com.example.demo.dto.UserDto;
 import com.example.demo.entities.Role;
 import com.example.demo.entities.User;
 import com.example.demo.security.PasswordProvider;
+import com.example.demo.service.role.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordProvider passwordProvider;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final RoleService roleService;
     private final ApplicationContext applicationContext;
     
     @Override
@@ -41,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User findById(long id) throws Exception {
+    public User findById(long id) throws NotFoundException {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(NotFoundConstants.USER));
     }
@@ -50,16 +52,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User save(UserDto user) throws NotFoundException {
         User userEntity = user.from();
-        userEntity.setPassword(passwordProvider.getPassword(user.getPassword()));
-        if (userEntity.getRoles() == null) {
-            Role role = roleRepository.findByName(RolesConstants.CUSTOMER)
-                    .orElseThrow(() -> new NotFoundException(NotFoundConstants.ROLE));
-            HashSet<Role> roles = new HashSet<>();
-            roles.add(role);
-            userEntity.setRoles(roles);
-            role.getUsers().add(userEntity);
+        Role role = roleService.getByName(RolesConstants.CUSTOMER);
+        if(role!=null) {
+            userEntity.setPassword(passwordProvider.getPassword(user.getPassword()));
+            userEntity.getRoles().add(role);
+            roleService.addUser(userEntity, role);
+            return userRepository.save(userEntity);
         }
-        return userRepository.save(userEntity);
+        throw new NotFoundException(NotFoundConstants.ROLE);
     }
 
     @Override

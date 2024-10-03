@@ -16,8 +16,6 @@ public interface AuthorService {
 
     Author saveAuthor(AuthorDto author, long userId) throws Exception;
 
-    void addBook(BookDto book, long authorId) throws Exception;
-
     default String getKey(Long authorId) {
         return "author:%d".formatted(authorId);
     }

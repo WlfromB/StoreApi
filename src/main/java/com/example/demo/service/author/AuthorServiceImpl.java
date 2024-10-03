@@ -4,16 +4,13 @@ import com.example.demo.cache.PageDeserializer;
 import com.example.demo.constant.classes.NotFoundConstants;
 import com.example.demo.constant.classes.RolesConstants;
 import com.example.demo.dao.AuthorRepository;
-import com.example.demo.dao.BookRepository;
-import com.example.demo.dao.RoleRepository;
-import com.example.demo.dao.UserRepository;
 import com.example.demo.dto.AuthorDto;
-import com.example.demo.dto.BookDto;
 import com.example.demo.entities.Author;
-import com.example.demo.entities.Book;
 import com.example.demo.entities.Role;
 import com.example.demo.entities.User;
 import com.example.demo.service.cache.CacheService;
+import com.example.demo.service.role.RoleService;
+import com.example.demo.service.user.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +25,9 @@ import org.webjars.NotFoundException;
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
-    private final BookRepository bookRepository;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final UserService userService;
     private final CacheService cacheService;
+    private final RoleService roleService;
 
     @Override
     @Transactional
@@ -48,6 +44,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    @Transactional
     public Page<Author> getAllAuthors(Pageable pageable) throws Exception {
         String key = getKey(pageable);
         Page<Author> authors = cacheService
@@ -65,32 +62,17 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public Author saveAuthor(AuthorDto author, long userId) throws NotFoundException, IllegalArgumentException {
-        User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException(NotFoundConstants.USER));
+    public Author saveAuthor(AuthorDto author, long userId) throws IllegalArgumentException {
+        User user = userService.findById(userId);
         Author authorEntity = authorRepository.save(author.from());
         if (user != null) {
             user.setAuthor(authorEntity);
-            Role role = roleRepository.findByName(RolesConstants.AUTHOR)
-                    .orElseThrow(() -> new NotFoundException(NotFoundConstants.ROLE));
-            user.getRoles().add(role);
-            role.getUsers().add(user);
-            roleRepository.save(role);
-            userRepository.save(user);
+            Role role = roleService.getByName(RolesConstants.AUTHOR);
+            roleService.addUser(user, role);
+            userService.changeRole(userId, role);
             return authorEntity;
         }
         throw new IllegalArgumentException(NotFoundConstants.USER);
     }
-
-    @Override
-    @Transactional
-    public void addBook(BookDto book, long authorId) throws Exception {
-        Author author = getAuthorById(authorId);
-        Book addedBook = bookRepository.findBookByTitle(book.getTitle())
-                .orElse(book.from());
-        addedBook.getAuthors().add(author);
-        author.getBooks().add(addedBook);
-        authorRepository.save(author);
-    }
-
 
 }
